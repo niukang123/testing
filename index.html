@@ -933,32 +933,258 @@ const quotes = [
   { text: "生活不是等待风暴过去，而是学会在雨中跳舞。", author: "常引用于心理韧性语境" }
 ];
   // 3. 政治倾向测试题库（目标 50 题，此处为示例）
-  const politicalQuestions = [
-    {
-      q: "你觉得个人自由和市场选择，比政府统一规划更重要吗？",
-      options: [
-        { text: "是，自由市场能更好配置资源", score: { liberal: 1 } },
-        { text: "否，政府应更多干预实现公平", score: { socialist: 1 } },
-        { text: "两者需要平衡，不能走极端", score: { moderate: 1 } }
-      ]
-    },
-    {
-      q: "面对社会传统，你的态度是：",
-      options: [
-        { text: "传统有助于维持稳定，应被尊重", score: { conservative: 1 } },
-        { text: "传统会束缚进步，必须革新", score: { liberal: 1 } },
-        { text: "值得保留的保留，需要改变就改变", score: { moderate: 1 } }
-      ]
-    },
-    {
-      q: "关于社会福利，你更认同：",
-      options: [
-        { text: "国家应提供更多公共福利保障", score: { socialist: 1 } },
-        { text: "福利应低一些，个人负责自己生活", score: { conservative: 1 } },
-        { text: "可以有一定福利但不要过高", score: { moderate: 1 } }
-      ]
-    }
-  ];
+const politicalQuestions = [
+  { q: "你认为政府在经济发展中应扮演什么角色？", options: [
+    { text: "有力调控，防止资本无序扩张，确保公共福利最大化", score: { socialist: 1 } },
+    { text: "维持规则与秩序，同时尽量给企业自主经营空间", score: { conservative: 1 } },
+    { text: "只做‘守夜人’，让市场和个体完全自由博弈", score: { libertarian: 1 } }
+  ]},
+  { q: "相对于国家利益，你如何看待国际合作？", options: [
+    { text: "应无条件支持全球环境/人权等超越国界的议题", score: { green: 1 } },
+    { text: "只有在符合本国长期发展时才值得合作", score: { nationalist: 1 } },
+    { text: "关税壁垒与主权高于一切，不应轻易让渡", score: { conservative: 1 } }
+  ]},
+  { q: "你对高收入者收高税率的态度是？", options: [
+    { text: "支持，用于提高全民教育医疗等公共资源水平", score: { socialist: 1 } },
+    { text: "适度可以，但不能损害创新和投资积极性", score: { liberal: 1 } },
+    { text: "强烈反对，富人创造的财富也是社会的财富", score: { libertarian: 1 } }
+  ]},
+  { q: "当你遇到公共广场的雕塑是历史争议人物时：", options: [
+    { text: "一切人物都应放在当时历史去理解，不应拆除", score: { conservative: 1 } },
+    { text: "如果其象征着压迫制度，应移走并重审历史", score: { liberal: 1 } },
+    { text: "这事不如开放投票，让社区自己决定不就行了吗", score: { moderate: 1 } }
+  ]},
+  { q: "关于宗教信仰在法律中的角色：", options: [
+    { text: "宗教属于私人领域，必须与公共法律保持完全分离", score: { libertarian: 1 } },
+    { text: "传统信仰中有许多智慧，公共伦理可容纳其精神价值", score: { conservative: 1 } },
+    { text: "宗教团体也应对社会平等议题提供实际帮助", score: { socialist: 1 } }
+  ]},
+  { q: "你更喜欢什么样的社会组织形态？", options: [
+    { text: "有强大基层公会与合作社，可自行组织生产", score: { socialist: 1 } },
+    { text: "以家庭为核心，邻里互助，大家彼此照应维持秩序", score: { traditional/conservative: 1 } },
+    { text: "尽量松散非强制，允许任何人自由成立各种兴趣组织", score: { libertarian: 1 } }
+  ]},
+  { q: "应对气候变暖，措施需：", options: [
+    { text: "积极推动本国能源转型，并加强全球协作减排", score: { green: 1 } },
+    { text: "若要求过分了，还应优先保证本国经济就业率", score: { nationalist: 1 } },
+    { text: "用碳税方式，依靠市场来奖励清洁技术最有效", score: { libertarian: 1 } }
+  ]},
+  { q: "当遇到发生在别国的国际侵略冲突时：", options: [
+    { text: "国际社会应采取集体强制力来阻止侵略行为", score: { liberal: 1 } },
+    { text: "保护自己民众和贸易通道即可，不该盲目站队", score: { conservative: 1 } },
+    { text: "邻国安全也会持续波及我方，必须军事援助纵深防御", score: { nationalist: 1 } }
+  ]},
+  { q: "关于青少年性教育课程，你希望：", options: [
+    { text: "加入全面的性别平等与情感尊重内容", score: { liberal: 1 } },
+    { text: "以教授纯粹生理与基础健康为主，少引入价值观争议", score: { conservative: 1 } },
+    { text: "主要由家长而非校方来选择教什么", score: { libertarian: 1 } }
+  ]},
+  { q: "如果一家大型跨国公司打算降低本国员工最低工资：", options: [
+    { text: "坚决出台法规禁止，并征重税保障劳动者底线", score: { socialist: 1 } },
+    { text: "鼓励公司扩大自愿培训等福利作为补偿，不过度强制", score: { conservative: 1 } },
+    { text: "只要人手雇用为自愿签约，就应尊重契约自由", score: { libertarian: 1 } }
+  ]},
+  { q: "在你看来，目前社会中真正的核心问题是？", options: [
+    { text: "财富差距太大，导致阶层流动僵化", score: { socialist: 1 } },
+    { text: "传统价值观日渐式微，导致人失去精神归属", score: { conservative: 1 } },
+    { text: "大家太过依赖政府，难以独立与承担责任", score: { libertarian: 1 } }
+  ]},
+  { q: "你对国家在军队建设巨额投入的态度？", options: [
+    { text: "必要，这是保护人民生存环境与主权不受侵犯的直接保障", score: { nationalist: 1 } },
+    { text: "可适度进行，但别挤压医疗教育等公共支出", score: { socialist: 1 } },
+    { text: "由公共安全需求来定，无需过份夸大战争风险", score: { moderate: 1 } }
+  ]},
+  { q: "当你发现工作单位的数据后台正精细追踪员工的一举一动：", options: [
+    { text: "这是工作需要，可自然视为提高效率和安全的工具", score: { conservative: 1 } },
+    { text: "危险！法律必须全面限制这种数据收集监控权力", score: { libertarian: 1 } },
+    { text: "加强算法审查和信息公开，确保不会造成歧视", score: { liberal: 1 } }
+  ]},
+  { q: "谈到同性伴侣的婚姻权益，你会：", options: [
+    { text: "只要真心相爱，应给予平等法律承认", score: { liberal: 1 } },
+    { text: "可以考虑注册伴侣或民事契约，不必替代传统婚姻词汇", score: { conservative: 1 } },
+    { text: "两种关系你都不想被强制——请停止指定谁来爱谁", score: { libertarian: 1 } }
+  ]},
+  { q: "如果全国房价已严重偏离当地正常人收入水平：", options: [
+    { text: "政府应直接大量兴办公有租赁房和限价住宅", score: { socialist: 1 } },
+    { text: "应放开土地供应限制来打破行政垄断与供给失衡", score: { libertarian: 1 } },
+    { text: "靠自由市场的自然涨跌就好，政府插手只会更糟", score: { conservative: 1 } }
+  ]},
+  { q: "对你而言，‘我是谁’这层身份认同最主要来自哪里？", options: [
+    { text: "来自我的国家认同，国民身份是一种共同体誓言", score: { nationalist: 1 } },
+    { text: "来自我的家庭土地与传统连接，具有延续性", score: { conservative: 1 } },
+    { text: "来自我个人的爱好、选择以及我亲手建立的社群", score: { liberal: 1 } }
+  ]},
+  { q: "面对大量年轻农村人口涌向大城市生活：", options: [
+    { text: "必须发展乡镇福利与产业，让人不必背井离乡也有好日子", score: { socialist: 1 } },
+    { text: "移民到城市本是个人自由，不必刻意干预", score: { libertarian: 1 } },
+    { text: "过度发展造成文化断裂，要保护和重建乡土伦理共同体", score: { conservative: 1 } }
+  ]},
+  { q: "关于历史教科书，你倾向的内容安排是？", options: [
+    { text: "坦诚呈现不同视角，让年青人学会自行理性消化", score: { moderate: 1 } },
+    { text: "对于历史英雄与创业功绩应更多褒扬，增强国家自信", score: { nationalist: 1 } },
+    { text: "应当深入自省，完整承认过去各族群所承受的苦难", score: { green: 1 } }
+  ]},
+  { q: "你觉得‘公民道德’最主要靠什么来维持？", options: [
+    { text: "明确写进法律细则加上严格执法与监督", score: { nationalist: 1 } },
+    { text: "根植于宗教与家庭伦理的长期熏陶慢慢形成", score: { conservative: 1 } },
+    { text: "倚赖公开透明的舆论与社区讨论，让大家自发演进", score: { liberal: 1 } }
+  ]},
+  { q: "关于国家拥有紧急状态下的审查或关停权力：", options: [
+    { text: "极端危机可以临时，但必须有严格期限和司法复核", score: { moderate: 1 } },
+    { text: "只要为了国家安全和公共稳定，应该全力支持", score: { nationalist: 1 } },
+    { text: "任何人掌握如此权力都是令人难以忍受的潜在威胁", score: { libertarian: 1 } }
+  ]},
+  { q: "你和朋友争论‘多国企业是否该被拆分反垄断’：会站哪一边？", options: [
+    { text: "平台势力太大伤害消费者，任何大型集中都应被拆开", score: { socialist: 1 } },
+    { text: "只要不搞价格勾结或压制，资本运作自有其合理边界", score: { libertarian: 1 } }
+  ]},
+  { q: "你期望四周的都市公共空间更多用来：", options: [
+    { text: "纪念民族历史和集体英雄塑像", score: { nationalist: 1 } },
+    { text: "可自由交谈、休憩的各种口袋公园与市集", score: { libertarian: 1 } },
+    { text: "增加无家者庇护所、社区厨房和公共图书馆等资助机构", score: { socialist: 1 } }
+  ]},
+  { q: "当地方教育局决定十岁以下小学生开始统一使用智能设备上课：", options: [
+    { text: "我反对无纸化教学，这会摧毁传统书写与专注", score: { conservative: 1 } },
+    { text: "加快科技教学是未来趋势，应全力支持基建", score: { libertarian: 1 } },
+    { text: "需关注设备费用成为新门槛，应提供免费数字平权计划", score: { liberal: 1 } }
+  ]},
+  { q: "关于死刑存废：我的看法是……", options: [
+    { text: "国家保留最终剥夺权，才能威慑穷凶极恶者", score: { conservative: 1 } },
+    { text: "应废除，司法系统可能失误且判决应由可逆的非死刑替代", score: { liberal: 1 } }
+  ]},
+  { q: "你对待世界贸易战的看法：", options: [
+    { text: "该用关税反击就用关税，目的是保护产业和就业", score: { conservative: 1 } },
+    { text: "自由贸易是带来科技与财富的引擎，反之会削弱全球协作", score: { liberal: 1 } },
+    { text: "应首先注意粮食能源等战略能自给自足的重要底线", score: { nationalist: 1 } }
+  ]},
+  { q: "你看待环境保护者提出禁止‘过度消费’的说法是：", options: [
+    { text: "符合实际，人类确实该节制消费并重设计循环经济体系", score: { green: 1 } },
+    { text: "矫枉过正了，消费是生产生长的动力源不应被污名", score: { libertarian: 1 } },
+    { text: "小心别让生态话术变成富国压制发展中国家的一种借口", score: { nationalist: 1 } }
+  ]},
+  { q: "当大规模失业骤然爆发时，国家应先……", options: [
+    { text: "积极出台大型公共建设以工代赈稳住就业", score: { socialist: 1 } },
+    { text: "先减企业税负，鼓励灵活创业与市场创造新岗位", score: { libertarian: 1 } },
+    { text: "靠基层社区与宗族家庭之间的照护体系自然消化缓冲", score: { conservative: 1 } }
+  ]},
+  { q: "关于大学校门是否应全天向公众免费开放：", options: [
+    { text: "开放，大学花园和知识场所有义务回馈公共社群", score: { liberal: 1 } },
+    { text: "应受限制，主要保障内部的师生安宁与学术秩序", score: { conservative: 1 } },
+    { text: "应该按预约管理，用现代技术既可以共享也不至于混乱", score: { moderate: 1 } }
+  ]},
+  { q: "在你的价值天平上，‘企业自由经营’与‘公会权益’孰重？", options: [
+    { text: "公会不可或缺，是打工者面对资本的基本筹码", score: { socialist: 1 } },
+    { text: "大家需要共处，但企业过度干预劳动者也会自损根基", score: { moderate: 1 } },
+    { text: "企业有权依契约决定自己要雇用谁，不该被迫接受工会规矩", score: { libertarian: 1 } }
+  ]},
+  { q: "假设有人主张修改宪法在国旗上添加新宗教符号，你会怎么想？", options: [
+    { text: "坚决捍卫国家符号世俗性，这是包容多元的根本原则", score: { liberal: 1 } },
+    { text: "如果历史悠久传承如此则保留无妨，这与宗教源流紧密关联", score: { conservative: 1 } },
+    { text: "个人喜好如何并存即可——国家可分开两套象征象征来满足所有人吗？", score: { green: 1 } }
+  ]},
+  { q: "国家全境禁渔一个月，但你当地靠湖渔民会失去整个旺季收入：", options: [
+    { text: "为子孙持续生态该禁则禁，但政府必须提供转业培训与失业救助金", score: { green/socialist: 1 } },
+    { text: "先努力辅导渔民改行兼运作，再在区域征收以补偿其损失", score: { moderate: 1 } },
+    { text: "讨厌一刀切政策，地方湖泊管理者可自主决定永续利用方式", score: { conservative: 1 } }
+  ]},
+  { q: "你觉得文化挪用（穿异族传统服饰）是否应受谴责？", options: [
+    { text: "只要尊重起源即可享受，文化本应流动共享", score: { libertarian: 1 } },
+    { text: "应当谨慎，替弱少文化发声避免将其商品化扭曲", score: { liberal: 1 } },
+    { text: "只要大家把我们传统用在正确的正式节日里就挺好，没必要上纲上线", score: { traditionalist: 1 } }
+  ]},
+  { q: "关于疫苗护照进入公共场所：", options: [
+    { text: "支持，为保护高危人群健康做出强制要求合理", score: { socialist: 1 } },
+    { text: "不同意，进入商场餐厅等本就属私人经营者管辖是自愿范围", score: { libertarian: 1 } },
+    { text: "国家有责任采取严格管制来防止下一波医疗床挤兑", score: { nationalist: 1 } }
+  ]},
+  { q: "对于地方政府决定按学区入学，你认为：", options: [
+    { text: "应取消学区房垄断，每个学生能够就近有资源较好的学校", score: { socialist: 1 } },
+    { text: "现有学区代表社区尊贵，想要好资源可以自行去私立校", score: { conservative: 1 } },
+    { text: "应让更多家庭轻松在家自学或弹性组成微型学习小组", score: { libertarian: 1 } }
+  ]},
+  { q: "当一位教师因网络言论被学校解雇：", options: [
+    { text: "教师在课外是普通市民，只要他没有违法学校无权审查", score: { libertarian: 1 } },
+    { text: "教师影响青年有示范责任，若职务要求签约则言论应有边界", score: { conservative: 1 } },
+    { text: "看其言论是否伤害到弱势学生的尊严而定具体司法审裁", score: { liberal: 1 } }
+  ]},
+  { q: "大熊猫自然保护区强制让当地原住民迁离以恢复荒野：", options: [
+    { text: "生态保护应慎重面对被迫搬迁居民的基本权利", score: { green/socialist: 1 } },
+    { text: "用经济补偿就能顺利解决，产权自由置换即可", score: { libertarian: 1 } }
+  ]},
+  { q: "在公众场合不戴口罩时你会想什么。", options: [
+    { text: "我健康我有权选择自己的着装风险，他人无权逼迫", score: { libertarian: 1 } },
+    { text: "这种情况仍应确保公共卫生，我愿配合法规以保护弱势", score: { socialist: 1 } }
+  ]},
+  { q: "怎样看待民众大面积游行请愿：", options: [
+    { text: "表达合理合法诉求的自由应获充分保障", score: { liberal: 1 } },
+    { text: "可能破坏社会秩序，公共安全大于个人集会的随意性", score: { nationalist: 1 } },
+    { text: "民间有无更好更成熟的协商流程，而不是总走上街？", score: { conservative: 1 } }
+  ]},
+  { q: "你喜欢阅读新闻时习惯于：", options: [
+    { text: "同时看国内外官方与民间核查栏目，自己拼凑事实", score: { liberal: 1 } },
+    { text: "完全相信本国通讯发布的资讯是高度负责的底稿", score: { nationalist: 1 } },
+    { text: "主要看财经与市场独立分析，不迷信任何口号", score: { libertarian: 1 } }
+  ]},
+  { q: "碰到难民船漂到国境边时：", options: [
+    { text: "基于人道主义打开港口并分配安置提成", score: { socialist: 1 } },
+    { text: "用完备资格审核机制允许少数有技能的人入境并转成公民", score: { moderate: 1 } },
+    { text: "拒绝让船入港以避免引起后续安全与公共预算负担", score: { nationalist: 1 } }
+  ]},
+  { q: "在你心中，家所代表的意义通常是：", options: [
+    { text: "私人屋檐下的安宁，不希望受外界势力打扰", score: { libertarian: 1 } },
+    { text: "家族血脉不断传衍的记忆与土地根脉", score: { conservative: 1 } },
+    { text: "人们能获得照顾与不再感觉孤独的互助基本单元", score: { socialist: 1 } }
+  ]},
+  { q: "网络平台中的仇恨言论应如何处理？", options: [
+    { text: "需依法迅速删除以维护少数族群免于污辱基本人格", score: { liberal: 1 } },
+    { text: "只要未构成直接暴力威胁，应让各种声音自由竞争", score: { libertarian: 1 } },
+    { text: "国家应严密整顿网络评论源头使言论不能破坏团结", score: { nationalist: 1 } }
+  ]},
+  { q: "如果要降低城市汽车的空气污染，你会优先想到：", options: [
+    { text: "补贴更多公共轨道交通限制燃油车进入市中心", score: { green: 1 } },
+    { text: "开发并发售平价电动小车替代现有汽车存量", score: { libertarian: 1 } },
+    { text: "宣扬传统脚踏步行街与社区营造的配套方案", score: { moderate: 1 } }
+  ]},
+  { q: "提到旅游开发，你会更推崇：", options: [
+    { text: "完全开发吸引外资，发展五星级设施促进经济繁荣", score: { libertarian: 1 } },
+    { text: "保护整体生态和文化遗产，严格限制游客总数量", score: { green: 1 } },
+    { text: "先照顾地方居民就业为主再谈其它价值", score: { socialist: 1 } }
+  ]},
+  { q: "你相信‘人是可以变得完美’这一点吗？", options: [
+    { text: "相信通过制度改善不断接近更公平完善的集体文化", score: { socialist: 1 } },
+    { text: "人的劣根性会不断重复，因此需要传统戒律持续节制", score: { conservative: 1 } },
+    { text: "不要试图改造人性最好，应创造人人互不干预的系统", score: { libertarian: 1 } }
+  ]},
+  { q: "当朋友圈里的公益捐款事件爆出虚假动机时，你的反应：", options: [
+    { text: "这不代表公益不行，要思考为什么会发生伪善并修整规则", score: { moderate: 1 } },
+    { text: "社会互助体系需要依靠个人自发监督而不是大力宏扬盖道德帽子", score: { libertarian: 1 } },
+    { text: "容易变成公开骗善款的事件，必须用严格法律来重罚严管善款项目", score: { nationalist: 1 } }
+  ]},
+  { q: "你比较认同哪一种司法制度目的？", options: [
+    { text: "真正给予人重生机会的修复式正义是优先方向", score: { liberal: 1 } },
+    { text: "威慑犯罪维持公共秩序才是首要价值考量", score: { conservative: 1 } },
+    { text: "无罪推定程序严谨应为最高保证以避免冤屈个体", score: { moderate: 1 } }
+  ]},
+  { q: "对于无现金支付绑架了我们的购物方式，你觉得它：", options: [
+    { text: "便利至上，替我们把数字交易都安全结合在一起很好", score: { libertarian: 1 } },
+    { text: "带有未经同意的监控风险，应保留人们选择现金支付的权利", score: { liberal: 1 } },
+    { text: "让老一辈略感困难而损失便利，仍可接受只要逐步教学", score: { moderate: 1 } }
+  ]},
+  { q: "大公司在疫情期间申请巨额援助金但同时又进行股票回购", options: [
+    { text: "已经营亏损就需要减税，不应以企业道德来设门槛", score: { conservative: 1 } },
+    { text: "坚决不批准援助，并要求企业同时承诺停止裁员并奉还利润", score: { socialist: 1 } }
+  ]},
+  { q: "关于世界语/人工智能等超越自然语言的全球通用系统发展，你更关注：", options: [
+    { text: "全球统一协作确实是解决气候疾病的有效路径", score: { green: 1 } },
+    { text: "文化多样性必然被稀释风险，需要保护本土语言措施", score: { nationalist: 1 } },
+    { text: "对于个人的效率提升无可限量值得乐观接受", score: { liberatarian: 1 } }
+  ]},
+  { q: "一位作家写书控诉祖国历史遗留的不公正问题：", options: [
+    { text: "书籍是人类共同记忆，应持续出版丰富现实反思", score: { liberal: 1 } },
+    { text: "争议控诉若破坏国家形象与一致感就不应由公共资源支持出版", score: { nationalist: 1 } },
+    { text: "让出版市场自己筛选买方反应，不必刻意禁也无需刻意扶持", score: { libertarian: 1 } }
+  ]}
+];
 
   const natureTraits = {
     sanguine: "多血质",
@@ -974,22 +1200,13 @@ const quotes = [
   };
 
   const politicalTypes = {
-    liberal: {
-      name: "自由主义倾向",
-      desc: "重视个人自由、进步与开放，倾向支持多元社会、思想变革和个体权利。"
-    },
-    conservative: {
-      name: "保守主义倾向",
-      desc: "重视传统、秩序和稳定，尊重既有习俗，强调渐进发展而非剧烈改变。"
-    },
-    socialist: {
-      name: "社会主义倾向",
-      desc: "重视平等、公平和集体福祉，支持政府对资源进行再分配或公共维护。"
-    },
-    moderate: {
-      name: "混合/中间主义倾向",
-      desc: "你的观点复杂而平衡，不同问题上会在不同主义之间采取务实态度，不执拗于单一标签。"
-    }
+    socialist: { name: "社会主义倾向", desc: "强调经济平等与集体福祉，主张以公有制或强力公共调节来保障民生与分配公平。" },
+    liberal: { name: "温和自由派倾向", desc: "重视个人权利、社会进步与机会公平，认为在市场经济及公民自由的框架内应兼顾社会关怀。" },
+    libertarian: { name: "自由意志主义倾向", desc: "极力主张个人自由，最小化国家干预，信奉自由市场，反对公私生活被强制约束。" },
+    conservative: { name: "传统保守主义倾向", desc: "看重传统家庭、社会秩序与国家稳定，倾向在保留既有文化基础上渐进变革。" },
+    nationalist: { name: "国家主义倾向", desc: "将本国利益、国家主权与内部安全放在最优先地位，强调统一的社群目标与民族承诺。" },
+    green: { name: "生态主义倾向", desc: "以生态环保为核心命题，批评无限增长，要求重新设定人类与自然环境的关系。" },
+    moderate: { name: "中间务实派", desc: "既不盲从某一主义，也不刻意对抗，强调在具体问题上采取平衡与试错式决策。" }
   };
 
   /* ------------------------ 核心逻辑 ------------------------ */
@@ -1060,7 +1277,7 @@ const quotes = [
   function startPolitical() {
     const body = document.getElementById('politicalBody');
     const questions = shuffle(politicalQuestions).slice(0, Math.min(20, politicalQuestions.length));
-    const scores = { liberal: 0, conservative: 0, socialist: 0, moderate: 0 };
+    const scores = { socialist: 0, liberal: 0, libertarian: 0, conservative: 0, nationalist: 0, green: 0, moderate: 0 };
     let idx = 0;
 
     function renderQ() {
