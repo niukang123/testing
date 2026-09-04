@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>简洁心理交互站</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+                   "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #f5f7fa;
+      color: #2d3436;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      width: 100%;
+    }
+    h1 {
+      text-align: center;
+      font-weight: 600;
+      font-size: 2rem;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      text-align: center;
+      color: #636e72;
+      margin-bottom: 32px;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+    }
+    .card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+    }
+    .card-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 0.92rem;
+      color: #636e72;
+      line-height: 1.5;
+    }
+    .view {
+      display: none;
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+    .view.active {
+      display: block;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      color: #0984e3;
+      font-size: 0.95rem;
+      cursor: pointer;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+    .quote-box {
+      text-align: center;
+      padding: 20px 0;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .quote-text {
+      font-size: 1.3rem;
+      line-height: 1.8;
+      font-style: italic;
+      color: #2d3436;
+    }
+    .quote-author {
+      margin-top: 16px;
+      color: #b2bec3;
+      font-size: 0.95rem;
+    }
+    .btn {
+      display: inline-block;
+      background: #0984e3;
+      color: #fff;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 30px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .btn:hover {
+      background: #0873c4;
+    }
+    .question {
+      margin: 20px 0;
+    }
+    .question-text {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      font-weight: 500;
+    }
+    .option {
+      display: block;
+      width: 100%;
+      padding: 12px 16px;
+      margin: 8px 0;
+      border: 1px solid #dfe6e9;
+      border-radius: 10px;
+      background: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.1s;
+    }
+    .option:hover {
+      border-color: #0984e3;
+      background: #f0f7ff;
+    }
+    .result-box {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .result-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin: 12px 0;
+    }
+    .result-desc {
+      font-size: 1rem;
+      color: #636e72;
+      line-height: 1.7;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .progress {
+      width: 100%;
+      height: 6px;
+      background: #eee;
+      border-radius: 3px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #0984e3;
+      transition: width 0.3s;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>🎯 心理交互站</h1>
+  <p class="subtitle">点击下方卡片开始体验</p>
+
+  <!-- 首页 -->
+  <div id="home" class="cards">
+    <div class="card" onclick="showView('nature')">
+      <div class="card-icon">🧬</div>
+      <div class="card-title">性格气质测试</div>
+      <div class="card-desc">从 50 题中随机抽 20 题，测测你的四种气质倾向。</div>
+    </div>
+    <div class="card" onclick="showView('quote')">
+      <div class="card-icon">💬</div>
+      <div class="card-title">每日一句</div>
+      <div class="card-desc">每天为你推荐一句心理学名言，并标注出处。</div>
+    </div>
+    <div class="card" onclick="showView('political')">
+      <div class="card-icon">⚖️</div>
+      <div class="card-title">政治倾向测试</div>
+      <div class="card-desc">从 50 题中随机抽 20 题，了解常见主义倾向。</div>
+    </div>
+  </div>
+
+  <!-- 性格测试视图 -->
+  <div id="natureView" class="view">
+    <button class="back-btn" onclick="showView('home')">← 返回首页</button>
+    <h2>🧬 性格气质测试</h2>
+    <div id="natureBody"></div>
+  </div>
+
+  <!-- 每日推荐视图 -->
+  <div id="quoteView" class="view">
+    <button class="back-btn" onclick="showView('home')">← 返回首页</button>
+    <h2>💬 每日一句</h2>
+    <div class="quote-box">
+      <div class="quote-text" id="quoteContent"></div>
+      <div class="quote-author" id="quoteAuthor"></div>
+    </div>
+    <button class="btn" style="display:block;margin:20px auto 0;" onclick="showQuote()">换一条（测试用）</button>
+  </div>
+
+  <!-- 政治倾向测试视图 -->
+  <div id="politicalView" class="view">
+    <button class="back-btn" onclick="showView('home')">← 返回首页</button>
+    <h2>⚖️ 政治倾向测试</h2>
+    <div id="politicalBody"></div>
+  </div>
+</div>
+
+<script>
+  /* ------------------------ 数据部分（可自行扩充） ------------------------ */
+
+  // 1. 性格测试题库（目标 50 题，此处为示例，请复制格式扩充）
+  const natureQuestions = [
+    {
+      q: "当你遇到一群新朋友时，你通常：",
+      options: [
+        { text: "主动上前与他们聊天", trait: "sanguine" },
+        { text: "观察谁更有趣再加入", trait: "choleric" },
+        { text: "安静地待着，等别人来找我", trait: "phlegmatic" },
+        { text: "感到有点紧张，尽量躲在角落", trait: "melancholic" }
+      ]
+    },
+    {
+      q: "在团队合作中，你比较像：",
+      options: [
+        { text: "气氛活跃者", trait: "sanguine" },
+        { text: "目标驱动者", trait: "choleric" },
+        { text: "稳定执行者", trait: "phlegmatic" },
+        { text: "细节检查者", trait: "melancholic" }
+      ]
+    },
+    {
+      q: "面对突发问题时，你最先会：",
+      options: [
+        { text: "笑着说“总有办法”", trait: "sanguine" },
+        { text: "立刻动手解决", trait: "choleric" },
+        { text: "先冷静分析整体局面", trait: "phlegmatic" },
+        { text: "感到担忧并反复思考后果", trait: "melancholic" }
+      ]
+    }
+  ];
+
+  // 2. 心理学名言库（目标 200 条，此处为示例）
+  const quotes = [
+    { text: "认识你自己。", author: "苏格拉底" },
+    { text: "没有所谓玩笑，所有的玩笑都有真实的成分。", author: "弗洛伊德" },
+    { text: "一个人毕其一生的努力，就是在整合他自童年时代起就已形成的性格。", author: "荣格" },
+    { text: "生命的意义在于成为你自己。", author: "马斯洛" },
+    { text: "幸福不是一种天赋，而是一种能力。", author: "塞利格曼" }
+  ];
+
+  // 3. 政治倾向测试题库（目标 50 题，此处为示例）
+  const politicalQuestions = [
+    {
+      q: "你觉得个人自由和市场选择，比政府统一规划更重要吗？",
+      options: [
+        { text: "是，自由市场能更好配置资源", score: { liberal: 1 } },
+        { text: "否，政府应更多干预实现公平", score: { socialist: 1 } },
+        { text: "两者需要平衡，不能走极端", score: { moderate: 1 } }
+      ]
+    },
+    {
+      q: "面对社会传统，你的态度是：",
+      options: [
+        { text: "传统有助于维持稳定，应被尊重", score: { conservative: 1 } },
+        { text: "传统会束缚进步，必须革新", score: { liberal: 1 } },
+        { text: "值得保留的保留，需要改变就改变", score: { moderate: 1 } }
+      ]
+    },
+    {
+      q: "关于社会福利，你更认同：",
+      options: [
+        { text: "国家应提供更多公共福利保障", score: { socialist: 1 } },
+        { text: "福利应低一些，个人负责自己生活", score: { conservative: 1 } },
+        { text: "可以有一定福利但不要过高", score: { moderate: 1 } }
+      ]
+    }
+  ];
+
+  const natureTraits = {
+    sanguine: "多血质",
+    choleric: "胆汁质",
+    phlegmatic: "粘液质",
+    melancholic: "抑郁质"
+  };
+  const traitDesc = {
+    sanguine: "活泼、乐观、善交际，情绪外露且变化快，适合需要热情和沟通的场合。",
+    choleric: "精力旺盛、果断、目标感强，行动迅速，但有时容易急躁冲动。",
+    phlegmatic: "沉静、稳重、耐心，情绪不易波动，生活节奏平稳，适合长期坚持。",
+    melancholic: "细腻、敏感、善于思考，对自我要求高，内心世界丰富，但容易多虑。"
+  };
+
+  const politicalTypes = {
+    liberal: {
+      name: "自由主义倾向",
+      desc: "重视个人自由、进步与开放，倾向支持多元社会、思想变革和个体权利。"
+    },
+    conservative: {
+      name: "保守主义倾向",
+      desc: "重视传统、秩序和稳定，尊重既有习俗，强调渐进发展而非剧烈改变。"
+    },
+    socialist: {
+      name: "社会主义倾向",
+      desc: "重视平等、公平和集体福祉，支持政府对资源进行再分配或公共维护。"
+    },
+    moderate: {
+      name: "混合/中间主义倾向",
+      desc: "你的观点复杂而平衡，不同问题上会在不同主义之间采取务实态度，不执拗于单一标签。"
+    }
+  };
+
+  /* ------------------------ 核心逻辑 ------------------------ */
+
+  function showView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById('home').style.display = (id === 'home') ? 'grid' : 'none';
+    if (id !== 'home') {
+      document.getElementById(id + 'View').classList.add('active');
+      if (id === 'quote') showQuote();
+      if (id === 'nature') startNature();
+      if (id === 'political') startPolitical();
+    } else {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    }
+  }
+
+  /* ---------- 性格测试 ---------- */
+  function startNature() {
+    const body = document.getElementById('natureBody');
+    const questions = shuffle(natureQuestions).slice(0, Math.min(20, natureQuestions.length));
+    const totals = { sanguine: 0, choleric: 0, phlegmatic: 0, melancholic: 0 };
+    let idx = 0;
+
+    function renderQ() {
+      if (idx >= questions.length) {
+        // 显示结果
+        const sorted = Object.entries(totals).sort((a,b) => b[1] - a[1]);
+        const top = sorted[0][0];
+        body.innerHTML = `
+          <div class="result-box">
+            <h3>🎉 测试完成</h3>
+            <div class="result-title">${natureTraits[top]}</div>
+            <p class="result-desc">${traitDesc[top]}</p>
+            <p style="margin-top:20px;color:#b2bec3;font-size:0.9rem">
+              ${Object.entries(totals).map(([k,v]) => `${natureTraits[k]}: ${v} 题`).join(' · ')}
+            </p>
+            <button class="btn" onclick="showView('home')">返回首页</button>
+          </div>
+        `;
+        return;
+      }
+      const q = questions[idx];
+      body.innerHTML = `
+        <div class="progress"><div class="progress-fill" style="width:${(idx/questions.length)*100}%"></div></div>
+        <div class="question">
+          <p class="question-text">第 ${idx+1} 题 / 共 ${questions.length} 题</p>
+          <p class="question-text">${q.q}</p>
+          ${q.options.map((opt, i) => `
+            <button class="option" onclick="pickNature(${i})">${String.fromCharCode(65+i)}. ${opt.text}</button>
+          `).join('')}
+        </div>
+      `;
+      window._currentQ = questions[idx];
+    }
+
+    window.pickNature = function(optIndex) {
+      const chosen = window._currentQ.options[optIndex];
+      totals[chosen.trait] = (totals[chosen.trait] || 0) + 1;
+      idx++;
+      renderQ();
+    };
+
+    renderQ();
+  }
+
+  /* ---------- 政治倾向测试 ---------- */
+  function startPolitical() {
+    const body = document.getElementById('politicalBody');
+    const questions = shuffle(politicalQuestions).slice(0, Math.min(20, politicalQuestions.length));
+    const scores = { liberal: 0, conservative: 0, socialist: 0, moderate: 0 };
+    let idx = 0;
+
+    function renderQ() {
+      if (idx >= questions.length) {
+        const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+        const top = sorted[0][0];
+        const result = politicalTypes[top];
+        body.innerHTML = `
+          <div class="result-box">
+            <h3>⚖️ 测试完成</h3>
+            <div class="result-title">${result.name}</div>
+            <p class="result-desc">${result.desc}</p>
+            <p style="margin-top:20px;color:#b2bec3;font-size:0.9rem">
+              得分：${Object.entries(scores).map(([k,v]) => `${politicalTypes[k].name}: ${v} 分`).join(' · ')}
+            </p>
+            <button class="btn" onclick="showView('home')">返回首页</button>
+          </div>
+        `;
+        return;
+      }
+      const q = questions[idx];
+      body.innerHTML = `
+        <div class="progress"><div class="progress-fill" style="width:${(idx/questions.length)*100}%"></div></div>
+        <div class="question">
+          <p class="question-text">第 ${idx+1} 题 / 共 ${questions.length} 题</p>
+          <p class="question-text">${q.q}</p>
+          ${q.options.map((opt, i) => `
+            <button class="option" onclick="pickPolitical(${i})">${String.fromCharCode(65+i)}. ${opt.text}</button>
+          `).join('')}
+        </div>
+      `;
+      window._currentP = questions[idx];
+    }
+
+    window.pickPolitical = function(optIndex) {
+      const chosen = window._currentP.options[optIndex];
+      for (const key in chosen.score) {
+        scores[key] = (scores[key] || 0) + chosen.score[key];
+      }
+      idx++;
+      renderQ();
+    };
+
+    renderQ();
+  }
+
+  /* ---------- 每日名言 ---------- */
+  function showQuote() {
+    const todayIndex = Math.floor(Date.now() / 86400000);
+    const quote = quotes[todayIndex % quotes.length];
+    document.getElementById('quoteContent').innerText = '“' + quote.text + '”';
+    document.getElementById('quoteAuthor').innerText = '—— ' + quote.author;
+  }
+
+  /* ---------- 工具函数 ---------- */
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // 初始化首页
+  document.getElementById('home').style.display = 'grid';
+</script>
+</body>
+</html>
