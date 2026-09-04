@@ -234,35 +234,457 @@
 
   // 1. 性格测试题库（目标 50 题，此处为示例，请复制格式扩充）
   const natureQuestions = [
-    {
-      q: "当你遇到一群新朋友时，你通常：",
-      options: [
-        { text: "主动上前与他们聊天", trait: "sanguine" },
-        { text: "观察谁更有趣再加入", trait: "choleric" },
-        { text: "安静地待着，等别人来找我", trait: "phlegmatic" },
-        { text: "感到有点紧张，尽量躲在角落", trait: "melancholic" }
-      ]
-    },
-    {
-      q: "在团队合作中，你比较像：",
-      options: [
-        { text: "气氛活跃者", trait: "sanguine" },
-        { text: "目标驱动者", trait: "choleric" },
-        { text: "稳定执行者", trait: "phlegmatic" },
-        { text: "细节检查者", trait: "melancholic" }
-      ]
-    },
-    {
-      q: "面对突发问题时，你最先会：",
-      options: [
-        { text: "笑着说“总有办法”", trait: "sanguine" },
-        { text: "立刻动手解决", trait: "choleric" },
-        { text: "先冷静分析整体局面", trait: "phlegmatic" },
-        { text: "感到担忧并反复思考后果", trait: "melancholic" }
-      ]
-    }
-  ];
-
+  {
+    q: "在一次聚会上，你会怎么做？",
+    options: [
+      { text: "主动和在场所有人聊天，活跃气氛", trait: "sanguine" },
+      { text: "找到最有趣的一两个人深聊", trait: "melancholic" },
+      { text: "安静地待在角落，先观察全场", trait: "phlegmatic" },
+      { text: "拉着朋友一起玩游戏，组织大家玩起来", trait: "choleric" }
+    ]
+  },
+  {
+    q: "当你制定学习或工作计划时，你通常：",
+    options: [
+      { text: "列一张非常详细的表格，并严格执行", trait: "melancholic" },
+      { text: "只有大致目标，但执行起来风风火火", trait: "choleric" },
+      { text: "计划会比较轻松，不给自己太大压力", trait: "phlegmatic" },
+      { text: "计划赶不上变化，边学边调整", trait: "sanguine" }
+    ]
+  },
+  {
+    q: "在团队合作中，你最适合的角色是：",
+    options: [
+      { text: "带头分工，督促大家往前推进", trait: "choleric" },
+      { text: "活跃气氛，让大家干劲十足", trait: "sanguine" },
+      { text: "认真听每个人的意见，汇总成方案", trait: "melancholic" },
+      { text: "默默做好属于自己的那部分", trait: "phlegmatic" }
+    ]
+  },
+  {
+    q: "遇到一件你从未做过的事，你的第一反应是：",
+    options: [
+      { text: "这太有意思了，马上想试试", trait: "sanguine" },
+      { text: "不急着做，先想清楚利弊再行动", trait: "phlegmatic" },
+      { text: "担心自己可能做不好", trait: "melancholic" },
+      { text: "做成它，无论有多难", trait: "choleric" }
+    ]
+  },
+  {
+    q: "朋友心情不好找你倾诉，你一般会：",
+    options: [
+      { text: "先安抚对方的情绪，再帮忙梳理问题", trait: "phlegmatic" },
+      { text: "说些好笑的事，想办法逗对方开心", trait: "sanguine" },
+      { text: "帮对方深入分析原因，找出根源", trait: "melancholic" },
+      { text: "直接告诉对方该怎么做，劝ta别沉浸情绪里", trait: "choleric" }
+    ]
+  },
+  {
+    q: "你如何看待自己的东西摆放：",
+    options: [
+      { text: "偶尔乱放，但总能找到", trait: "sanguine" },
+      { text: "很整齐，每样东西都有固定位置", trait: "melancholic" },
+      { text: "习惯了，收不收都行", trait: "phlegmatic" },
+      { text: "看起来有点乱，但我心里有数", trait: "choleric" }
+    ]
+  },
+  {
+    q: "当你的观点被人否定时，你更可能：",
+    options: [
+      { text: "表面不动声色，内心反复琢磨为什么", trait: "melancholic" },
+      { text: "一笑而过，不太放在心上", trait: "sanguine" },
+      { text: "立刻反驳，想证明自己是正确的", trait: "choleric" },
+      { text: "心平气和地接受，然后继续做自己的事", trait: "phlegmatic" }
+    ]
+  },
+  {
+    q: "你通常怎么安排一天的任务？",
+    options: [
+      { text: "先把最重要的硬骨头啃掉，再处理其他事", trait: "choleric" },
+      { text: "磨蹭一会儿，等状态来了再干活", trait: "sanguine" },
+      { text: "按部就班慢慢做，中途适当休息", trait: "phlegmatic" },
+      { text: "提前列好清单，尽量按计划保质保量完成", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "你最喜欢的周末方式是：",
+    options: [
+      { text: "约上朋友到处玩，越热闹越好", trait: "sanguine" },
+      { text: "悠闲地待在家，看看剧或者发发呆", trait: "phlegmatic" },
+      { text: "宅家完成自己一直惦记的爱好或创作", trait: "melancholic" },
+      { text: "去挑战一件有难度的事，比如爬山、比赛", trait: "choleric" }
+    ]
+  },
+  {
+    q: "面对一项长期枯燥的任务，你会：",
+    options: [
+      { text: "稳住节奏，按部就班地推进", trait: "phlegmatic" },
+      { text: "把任务分成阶段，每完成一阶段都很有满足感", trait: "choleric" },
+      { text: "很难坚持，需要中途给自己找点乐子", trait: "sanguine" },
+      { text: "担心结果不够好，会反复检查每个细节", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "当别人和你意见不同时，你更可能：",
+    options: [
+      { text: "尊重差异，不太想争论", trait: "phlegmatic" },
+      { text: "试图说服对方，讲一堆道理", trait: "choleric" },
+      { text: "会有点不舒服，但还是会完整说完自己的观点", trait: "melancholic" },
+      { text: "顺着气氛走，差不多就结束话题", trait: "sanguine" }
+    ]
+  },
+  {
+    q: "让你做一个重要决定时，你会：",
+    options: [
+      { text: "大量收集信息，反复权衡之后才定", trait: "melancholic" },
+      { text: "相信直觉，拍板很快，错了再改", trait: "choleric" },
+      { text: "有点拖延，往往到最后一刻才决定", trait: "phlegmatic" },
+      { text: "找朋友讨论，听听大家的意见再决定", trait: "sanguine" }
+    ]
+  },
+  {
+    q: "哪种描述更符合你？",
+    options: [
+      { text: "我热情而且容易亲近", trait: "sanguine" },
+      { text: "我清醒而且目标感很强", trait: "choleric" },
+      { text: "我平和而且不易被激怒", trait: "phlegmatic" },
+      { text: "我细腻而且不太容易被理解", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "在团队里和大家发生矛盾时，你通常会：",
+    options: [
+      { text: "主动做和事佬，开两句玩笑缓和气氛", trait: "sanguine" },
+      { text: "不回避冲突，觉得把话说清楚才能解决", trait: "choleric" },
+      { text: "心里不太舒服，但会先忍一忍", trait: "melancholic" },
+      { text: "尽量不掺和，等大家都冷静下来再谈", trait: "phlegmatic" }
+    ]
+  },
+  {
+    q: "如果你去旅行，你更喜欢哪种方式？",
+    options: [
+      { text: "行程详细，每个景点都提前安排妥当", trait: "melancholic" },
+      { text: "找两三个靠谱的朋友同行，去哪到时候再说", trait: "sanguine" },
+      { text: "自己出发，路上随遇而安", trait: "phlegmatic" },
+      { text: "去一个有挑战性的地方，比如徒步或野外探险", trait: "choleric" }
+    ]
+  },
+  {
+    q: "你的房间或书桌上通常是什么状态？",
+    options: [
+      { text: "整洁有序，不太喜欢别人乱动", trait: "melancholic" },
+      { text: "比较随意，自己觉得舒服就好", trait: "phlegmatic" },
+      { text: "经常堆着不少刚用过的杂物，周末才集中清理", trait: "sanguine" },
+      { text: "目光所及之处，都是自己正在推进的项目和资料", trait: "choleric" }
+    ]
+  },
+  {
+    q: "当你看一部很感人的电影时：",
+    options: [
+      { text: "情绪完全跟着剧情走，看得很投入", trait: "sanguine" },
+      { text: "即使表情平静，内心也有很大触动", trait: "melancholic" },
+      { text: "能平静地看完，很少特别激动", trait: "phlegmatic" },
+      { text: "更关注电影的主题和逻辑，情节不太影响我", trait: "choleric" }
+    ]
+  },
+  {
+    q: "关于“说到做到”这件事：",
+    options: [
+      { text: "非常看重，答应了的事就算再难也会完成", trait: "choleric" },
+      { text: "大多能做到，但有时会忘记", trait: "sanguine" },
+      { text: "基本说到做到，从不轻易承诺", trait: "phlegmatic" },
+      { text: "同样很看重，做不到时自己会非常自责难过", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "如果你意外获得一整天的空闲，你会：",
+    options: [
+      { text: "提前列好清单，把时间填满才觉得不浪费", trait: "choleric" },
+      { text: "随感觉走，想做什么就做什么", trait: "sanguine" },
+      { text: "睡到自然醒，然后慢慢悠悠过完这一天", trait: "phlegmatic" },
+      { text: "用来做一件平时没空做的深度爱好，比如阅读或写作", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "提到“压力”这个词，你最容易出现哪种状态？",
+    options: [
+      { text: "身体紧张，晚上会思来想去睡不着", trait: "melancholic" },
+      { text: "坐不住，会出去跑一圈或做点什么来释放", trait: "choleric" },
+      { text: "暂时先放着，该吃吃该睡睡，过几天再看", trait: "phlegmatic" },
+      { text: "找朋友吐槽一通，说出来心里就舒服了", trait: "sanguine" }
+    ]
+  },
+  {
+    q: "你用社交软件聊天时：",
+    options: [
+      { text: "经常秒回，喜欢用表情包活跃气氛", trait: "sanguine" },
+      { text: "有事说事，不太喜欢闲聊", trait: "choleric" },
+      { text: "看到了但有时隔很久才想起回复", trait: "phlegmatic" },
+      { text: "会斟酌用词，不希望让对方产生误会", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "你的日常穿衣风格更接近：",
+    options: [
+      { text: "基本款和舒适的衣服为主，不折腾", trait: "phlegmatic" },
+      { text: "个性鲜明，有自己明确的风格", trait: "choleric" },
+      { text: "经常买新衣服，但衣柜有点乱", trait: "sanguine" },
+      { text: "分门别类整理得很好，配色搭配也研究过", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "一群人在说笑时，你通常是：",
+    options: [
+      { text: "也加入说笑，还可能是带节奏的那个人", trait: "sanguine" },
+      { text: "偶尔插几句，但更多时候在听", trait: "phlegmatic" },
+      { text: "不太笑，觉得有些话题挺无聊的", trait: "choleric" },
+      { text: "会留意每个人的表情和语气，觉得挺有意思", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "如果你想健身或减肥，你会怎么做？",
+    options: [
+      { text: "给自己定详细计划，每天打卡监督", trait: "choleric" },
+      { text: "拉一个朋友一起，互相打气才坚持得住", trait: "sanguine" },
+      { text: "不太需要刻意，平时注意就好", trait: "phlegmatic" },
+      { text: "会想很多，怕自己做不好而迟迟难以开始", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "别人送了你一件不太合心意的礼物，你会：",
+    options: [
+      { text: "表现得很开心，礼物不重要，心意最重要", trait: "sanguine" },
+      { text: "直接说出自己的喜好，希望对方下次别再送错", trait: "choleric" },
+      { text: "好好收下，不会让对方难做", trait: "phlegmatic" },
+      { text: "表面说谢谢，心里会有点介意，觉得对方不够懂自己", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "如果让你选未来的工作，你更倾向：",
+    options: [
+      { text: "充满变化、能接触很多人的工作", trait: "sanguine" },
+      { text: "有挑战性、能体现个人能力的工作", trait: "choleric" },
+      { text: "稳定、没有太大压力的工作", trait: "phlegmatic" },
+      { text: "安静、能让自己深度思考的工作", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "集体活动中有人请你即兴发言，你会：",
+    options: [
+      { text: "没问题，我张口就能说", trait: "sanguine" },
+      { text: "不太喜欢，但赶鸭子上架也能讲", trait: "choleric" },
+      { text: "提前给稿子可以，临时说会有点难受", trait: "melancholic" },
+      { text: "能简短说几句，但不想说太多", trait: "phlegmatic" }
+    ]
+  },
+  {
+    q: "下面哪种评价最让你感到被认可？",
+    options: [
+      { text: "和你相处让人觉得轻松", trait: "sanguine" },
+      { text: "你执行力强、很有冲劲", trait: "choleric" },
+      { text: "你认真细致，追求把事情做漂亮", trait: "melancholic" },
+      { text: "你情绪稳定、很好相处", trait: "phlegmatic" }
+    ]
+  },
+  {
+    q: "当你要记很多枯燥的考试资料时，你通常：",
+    options: [
+      { text: "编口诀或者联想有趣画面来帮助记忆", trait: "sanguine" },
+      { text: "限定时间，背完一项就划掉一项", trait: "choleric" },
+      { text: "反复复习很多遍，直到非常熟练才安心", trait: "melancholic" },
+      { text: "按自己的节奏慢慢来，不着急", trait: "phlegmatic" }
+    ]
+  },
+  {
+    q: "朋友临时取消了和你的约定，你的第一反应是：",
+    options: [
+      { text: "没事，那我也正好轻松一下", trait: "phlegmatic" },
+      { text: "有点失望，不过可以再找别人玩", trait: "sanguine" },
+      { text: "有点不爽，我很讨厌计划被打乱", trait: "choleric" },
+      { text: "会忍不住想，是不是自己哪里让朋友不想来了", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "你觉得自己更常被人描述为：",
+    options: [
+      { text: "风趣幽默", trait: "sanguine" },
+      { text: "说一不二", trait: "choleric" },
+      { text: "温和敦厚", trait: "phlegmatic" },
+      { text: "敏感细腻", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "在群体中，如果大多数人都反对你的意见，你会：",
+    options: [
+      { text: "重新仔细分析一遍自己的观点，寻找更严密的论证", trait: "melancholic" },
+      { text: "当场不争，但之后会想办法说服更多人", trait: "choleric" },
+      { text: "如果说不通就算了，不强求", trait: "phlegmatic" },
+      { text: "换一个更有趣的方式再讲一遍，争取大家接受", trait: "sanguine" }
+    ]
+  },
+  {
+    q: "当领导或老师布置了一个模糊不清的任务，你会：",
+    options: [
+      { text: "马上提问，要求先把目标明确下来", trait: "choleric" },
+      { text: "脑子里已经开始产生各种猜测和担忧", trait: "melancholic" },
+      { text: "先按自己觉得合理的方向做起来再说", trait: "sanguine" },
+      { text: "先等别人去问，自己不动声色", trait: "phlegmatic" }
+    ]
+  },
+  {
+    q: "上学或上班前的早晨，你通常是：",
+    options: [
+      { text: "踩点抵达，一路紧张又刺激", trait: "sanguine" },
+      { text: "预留了充足时间，不疾不徐地出门", trait: "phlegmatic" },
+      { text: "提前规划好时间，基本从不迟到", trait: "choleric" },
+      { text: "会提前很早到，因为害怕迟到或出错", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "如果电脑突然死机，而你刚写的东西没保存，你会：",
+    options: [
+      { text: "马上找办法恢复，边操作边骂", trait: "choleric" },
+      { text: "急也没用，重启看看再说", trait: "phlegmatic" },
+      { text: "觉得糟透了，一直懊恼自己为什么没早点保存", trait: "melancholic" },
+      { text: "先发个朋友圈吐槽一下，求点安慰", trait: "sanguine" }
+    ]
+  },
+  {
+    q: "哪种生活方式更让你觉得舒服？",
+    options: [
+      { text: "多与人交往，享受陪伴和热闹", trait: "sanguine" },
+      { text: "多挑战自己，不断突破舒适区", trait: "choleric" },
+      { text: "多休息放松，保持内心平静", trait: "phlegmatic" },
+      { text: "多留时间独处，思考自己和生活", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "你的消费习惯更接近哪种？",
+    options: [
+      { text: "遇到喜欢的就会买，不太犹豫", trait: "sanguine" },
+      { text: "该花就花，但主要看花得值不值", trait: "choleric" },
+      { text: "比较节省，不必要的钱尽量不花", trait: "phlegmatic" },
+      { text: "买之前会反复比较很久，精打细算", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "打牌或玩游戏输掉的时候，你通常会：",
+    options: [
+      { text: "哈哈一笑，再来一局", trait: "sanguine" },
+      { text: "有点不服气，赢了才想停", trait: "choleric" },
+      { text: "不介意，游戏而已", trait: "phlegmatic" },
+      { text: "表面没事，但心里会反复复盘，有点不舒服", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "你平时如何整理手机里的照片或备忘录？",
+    options: [
+      { text: "拍了就拍了，很少专门整理", trait: "sanguine" },
+      { text: "会按时间或类别整理得清清楚楚", trait: "melancholic" },
+      { text: "手机分区明确，定期清理不需要的东西", trait: "choleric" },
+      { text: "基本不拍照，也不怎么整理", trait: "phlegmatic" }
+    ]
+  },
+  {
+    q: "你更希望朋友怎样对待你？",
+    options: [
+      { text: "听我分享新鲜事，我也愿意听他们的", trait: "sanguine" },
+      { text: "有话直说，不要拐弯抹角", trait: "choleric" },
+      { text: "不必天天联系，给彼此空间", trait: "phlegmatic" },
+      { text: "能接住我的情绪，很多事不必解释就能懂", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "如果你参加公益活动，你更可能做哪种角色？",
+    options: [
+      { text: "号召大家一起参与，把气氛搞起来", trait: "sanguine" },
+      { text: "亲力亲为，有人组织落实到底", trait: "choleric" },
+      { text: "出钱出力就好，不想当出头鸟", trait: "phlegmatic" },
+      { text: "容易被弱势群体的处境触动，思考深层问题", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "被老师或领导批评做得不够好时，你的第一反应是：",
+    options: [
+      { text: "心里很难受，觉得自己确实没用", trait: "melancholic" },
+      { text: "想证明自己，后面加倍努力", trait: "choleric" },
+      { text: "会去改进，但不会因此太受影响", trait: "phlegmatic" },
+      { text: "有点小难过，但过会儿找点开心的事就能恢复", trait: "sanguine" }
+    ]
+  },
+  {
+    q: "下面哪种描述更接近你的朋友关系？",
+    options: [
+      { text: "朋友很多，知心的也有好几个", trait: "sanguine" },
+      { text: "朋友不算多，但都非常铁", trait: "choleric" },
+      { text: "有几位老朋友，联系不频繁但关系很稳定", trait: "phlegmatic" },
+      { text: "很难完全打开心扉，觉得真正懂我的人很少", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "当你需要做一个长期规划时：",
+    options: [
+      { text: "会制定分阶段目标，按时间节点推进", trait: "choleric" },
+      { text: "有大方向就够了，具体细节边走边调", trait: "sanguine" },
+      { text: "不想规划太远，把当下过好就行", trait: "phlegmatic" },
+      { text: "会规划得很深很远，但如果执行不了就会非常焦虑", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "如果必须用一种动物比喻自己，你更接近：",
+    options: [
+      { text: "狗——热情忠诚，喜欢与人亲近", trait: "sanguine" },
+      { text: "狮子——强势自信，不愿被支配", trait: "choleric" },
+      { text: "猫——独立安静，按自己的节奏生活", trait: "phlegmatic" },
+      { text: "狼——外表坚硬，内心孤独敏感", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "以下哪种状态是你最讨厌的？",
+    options: [
+      { text: "无聊，没事做，也没人聊天", trait: "sanguine" },
+      { text: "优柔寡断，行动受阻", trait: "choleric" },
+      { text: "自己的节奏被打乱，被迫忙忙乱乱", trait: "phlegmatic" },
+      { text: "被人误解，或者不被认真对待", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "当你发现一个朋友开始渐渐疏远你，你会：",
+    options: [
+      { text: "主动找对方聊聊，当面问清楚原因", trait: "choleric" },
+      { text: "再多约几次，用热情把关系拉回来", trait: "sanguine" },
+      { text: "尊重对方的节奏，想亲近时自然就亲近了", trait: "phlegmatic" },
+      { text: "反复回忆是不是自己哪里做错了，陷入内耗", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "你更能理解下面哪句话？",
+    options: [
+      { text: "生活就该热热闹闹的", trait: "sanguine" },
+      { text: "人不能没有干劲和野心", trait: "choleric" },
+      { text: "平安喜乐最难得", trait: "phlegmatic" },
+      { text: "人和人之间真正的理解，实在太少了", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "写完一篇文章或作业后，你通常会：",
+    options: [
+      { text: "如释重负，赶紧交出去", trait: "sanguine" },
+      { text: "检查一遍错别字和格式，确认没问题再提交", trait: "phlegmatic" },
+      { text: "完成速度很快，不太纠结细节", trait: "choleric" },
+      { text: "反复修改很多次，总担心还不够完美", trait: "melancholic" }
+    ]
+  },
+  {
+    q: "如果你刚进入一个新集体，你的表现更可能是：",
+    options: [
+      { text: "过不了多久，就能和不少人混熟", trait: "sanguine" },
+      { text: "先确定自己的目标，不太会被环境左右", trait: "choleric" },
+      { text: "慢慢融入，不着急，顺其自然", trait: "phlegmatic" },
+      { text: "会比较在意别人怎么看我，一开始有点拘束", trait: "melancholic" }
+    ]
+  }
+];
   // 2. 心理学名言库（目标 200 条，此处为示例）
   const quotes = [
     { text: "认识你自己。", author: "苏格拉底" },
