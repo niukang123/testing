@@ -1467,6 +1467,240 @@
       <p style="margin-top:24px;color:#b2bec3;font-size:0.85rem;text-align:center;">${contactInfo.note}</p>
     `;
   }
+  /* ---------- 心理小游戏 ---------- */
+
+  const STROOP_COLORS = {
+    red:    { name: "红", css: "#e74c3c" },
+    blue:   { name: "蓝", css: "#3498db" },
+    green:  { name: "绿", css: "#27ae60" },
+    yellow: { name: "黄", css: "#f1c40f" }
+  };
+
+  let stroopState = null;
+  let schulteState = null;
+
+  /* ----- 游戏菜单 ----- */
+  function renderGameMenu() {
+    const body = document.getElementById('gameBody');
+    body.innerHTML = `
+      <p style="color:#636e72;line-height:1.7;margin-bottom:20px;">
+        下面两个都是认知心理学里的经典实验，改成小游戏后可以直接玩。所有数据只在你自己的浏览器里计算，不会被上传。
+      </p>
+      <div class="cards" style="grid-template-columns:1fr;">
+        <div class="card" onclick="startStroop()">
+          <div class="card-icon">🌈</div>
+          <div class="card-title">斯特鲁普效应测试</div>
+          <div class="card-desc">字义与字体颜色冲突时，你的大脑能多快做出正确判断？共 20 题。</div>
+        </div>
+        <div class="card" onclick="startSchulte()">
+          <div class="card-icon">🔢</div>
+          <div class="card-title">舒尔特方格</div>
+          <div class="card-desc">在 5×5 网格中按顺序找出 1–25，测测你的注意力广度。</div>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ----- 游戏一：斯特鲁普效应 ----- */
+  function startStroop() {
+    stroopState = { total: 20, index: 0, correct: 0, times: [], startTime: 0, answer: null };
+    nextStroopQuestion();
+  }
+
+  function nextStroopQuestion() {
+    const body = document.getElementById('gameBody');
+
+    if (stroopState.index >= stroopState.total) {
+      finishStroop();
+      return;
+    }
+
+    const keys = Object.keys(STROOP_COLORS);
+    const wordKey = keys[Math.floor(Math.random() * keys.length)];
+    let colorKey;
+
+    if (Math.random() < 0.5) {
+      colorKey = wordKey;                       // 一致条件：字义 = 字体色
+    } else {
+      do {
+        colorKey = keys[Math.floor(Math.random() * keys.length)];
+      } while (colorKey === wordKey);           // 冲突条件：字义 ≠ 字体色
+    }
+
+    stroopState.answer = colorKey;
+    stroopState.startTime = performance.now();
+
+    body.innerHTML = `
+      <div class="progress"><div class="progress-fill" style="width:${(stroopState.index / stroopState.total) * 100}%"></div></div>
+      <p style="text-align:center;color:#636e72;margin-bottom:8px;">
+        第 ${stroopState.index + 1} / ${stroopState.total} 题 · 请选【字体的颜色】，不是字的意思
+      </p>
+      <div style="text-align:center;font-size:5rem;font-weight:700;line-height:1.2;color:${STROOP_COLORS[colorKey].css};margin:28px 0;">
+        ${STROOP_COLORS[wordKey].name}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+        ${keys.map(k => `
+          <button class="option" style="text-align:center;font-weight:600;" onclick="answerStroop('${k}')">
+            ${STROOP_COLORS[k].name}色
+          </button>
+        `).join('')}
+      </div>
+    `;
+  }
+
+  function answerStroop(key) {
+    const elapsed = performance.now() - stroopState.startTime;
+    if (key === stroopState.answer) {
+      stroopState.correct++;
+      stroopState.times.push(elapsed);
+    }
+    stroopState.index++;
+    nextStroopQuestion();
+  }
+
+  function finishStroop() {
+    const body = document.getElementById('gameBody');
+    const s = stroopState;
+    const avg = s.times.length ? Math.round(s.times.reduce((a, b) => a + b, 0) / s.times.length) : 0;
+    const acc = Math.round((s.correct / s.total) * 100);
+
+    let comment;
+    if (acc >= 90 && avg < 800) {
+      comment = "非常出色。你的抑制控制和反应速度都处在很靠前的水平。";
+    } else if (acc >= 80 && avg < 1100) {
+      comment = "表现良好。能在干扰条件下稳定做出判断，说明注意力控制不错。";
+    } else if (acc < 60) {
+      comment = "正确率偏低。可能是太着急，也可能是被字义带偏了——这正是这个测试想说明的现象。";
+    } else {
+      comment = "表现平稳。可以再试一次，很多人在第二次会明显变快。";
+    }
+
+    body.innerHTML = `
+      <div class="result-box">
+        <h3>🎉 测试完成</h3>
+        <div class="result-title">${acc}% 正确</div>
+        <p class="result-desc">
+          平均反应时间：<strong>${avg}</strong> 毫秒<br>
+          答对：${s.correct} / ${s.total} 题<br><br>
+          ${comment}
+        </p>
+        <p style="margin:22px auto 0;color:#b2bec3;font-size:0.9rem;line-height:1.8;max-width:520px;">
+          斯特鲁普效应是指：当你必须说出字体的颜色、而字义本身又在说另一种颜色时，
+          大脑的两个加工过程会互相干扰，反应因此变慢。它反映的是<b>选择性注意</b>和<b>抑制控制</b>能力，
+          也是认知心理学最经典的实验之一。
+        </p>
+        <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn" style="margin-top:0;" onclick="startStroop()">再玩一次</button>
+          <button class="btn" style="margin-top:0;background:#dfe6e9;color:#2d3436;" onclick="renderGameMenu()">换一个游戏</button>
+        </div>
+      </div>
+    `;
+  }
+
+  /* ----- 游戏二：舒尔特方格 ----- */
+  function startSchulte() {
+    const nums = [];
+    for (let i = 1; i <= 25; i++) nums.push(i);
+    for (let i = nums.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [nums[i], nums[j]] = [nums[j], nums[i]];
+    }
+    schulteState = { grid: nums, next: 1, startTime: performance.now() };
+    renderSchulte();
+  }
+
+  function renderSchulte() {
+    const body = document.getElementById('gameBody');
+    body.innerHTML = `
+      <p style="text-align:center;color:#636e72;margin-bottom:18px;line-height:1.7;">
+        按 <strong>1 → 25</strong> 的顺序依次点击。当前目标：
+        <strong id="schulteTarget" style="color:#0984e3;font-size:1.25rem;">${schulteState.next}</strong>
+      </p>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;max-width:420px;margin:0 auto;">
+        ${schulteState.grid.map(n => `
+          <button data-num="${n}" onclick="clickSchulte(${n})"
+            style="aspect-ratio:1/1;border:1px solid #dfe6e9;border-radius:10px;background:#fff;
+                   font-size:1.05rem;font-weight:600;color:#2d3436;cursor:pointer;
+                   transition:background 0.15s,border-color 0.15s;">
+            ${n}
+          </button>
+        `).join('')}
+      </div>
+      <p style="text-align:center;color:#b2bec3;font-size:0.85rem;margin-top:18px;">点错不扣分，但会耽误时间。</p>
+    `;
+  }
+
+  function clickSchulte(n) {
+    const btn = document.querySelector(`[data-num="${n}"]`);
+
+    if (n !== schulteState.next) {
+      if (btn) {
+        btn.style.background = "#ffe0e0";
+        btn.style.borderColor = "#e74c3c";
+        setTimeout(() => {
+          if (btn) {
+            btn.style.background = "#fff";
+            btn.style.borderColor = "#dfe6e9";
+          }
+        }, 280);
+      }
+      return;
+    }
+
+    if (btn) {
+      btn.style.background = "#d4f5e2";
+      btn.style.borderColor = "#27ae60";
+      btn.style.color = "#27ae60";
+      btn.disabled = true;
+    }
+
+    schulteState.next++;
+
+    if (schulteState.next > 25) {
+      finishSchulte();
+    } else {
+      const t = document.getElementById('schulteTarget');
+      if (t) t.textContent = schulteState.next;
+    }
+  }
+
+  function finishSchulte() {
+    const seconds = (performance.now() - schulteState.startTime) / 1000;
+    const body = document.getElementById('gameBody');
+
+    let level, comment;
+    if (seconds < 20) {
+      level = "优秀";
+      comment = "注意力广度和视觉搜索速度都很强，这个成绩属于上游水平。";
+    } else if (seconds < 35) {
+      level = "良好";
+      comment = "处在正常偏上的水平，注意力的集中度不错。";
+    } else if (seconds < 55) {
+      level = "一般";
+      comment = "这是大多数初学者的水平，多练几次会有明显进步。";
+    } else {
+      level = "有待提升";
+      comment = "可能是注意力被分散，或者今天状态不太好。休息一下再试。";
+    }
+
+    body.innerHTML = `
+      <div class="result-box">
+        <h3>🎉 完成</h3>
+        <div class="result-title">${seconds.toFixed(1)} 秒</div>
+        <p class="result-desc">
+          评级：<strong>${level}</strong><br>${comment}
+        </p>
+        <p style="margin:22px auto 0;color:#b2bec3;font-size:0.9rem;line-height:1.8;max-width:520px;">
+          舒尔特方格原本用于飞行员和宇航员的注意力选拔，现在常被用来训练视觉搜索和专注力。
+          常见参考区间：20 秒以内为优秀，20–35 秒良好，35–55 秒一般。
+        </p>
+        <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn" style="margin-top:0;" onclick="startSchulte()">再玩一次</button>
+          <button class="btn" style="margin-top:0;background:#dfe6e9;color:#2d3436;" onclick="renderGameMenu()">换一个游戏</button>
+        </div>
+      </div>
+    `;
+  }
   /* ---------- 工具函数 ---------- */
   function shuffle(arr) {
     const a = arr.slice();
