@@ -1295,7 +1295,12 @@
   };
   /* ------------------------ 核心逻辑 ------------------------ */
 
+ // 已雪藏板块：恢复时从数组中移除对应 id 即可
+  const HIDDEN_VIEWS = ['political'];
   function showView(id) {
+    if (HIDDEN_VIEWS.includes(id)) {
+      id = 'home';
+    }
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('home').style.display = (id === 'home') ? 'grid' : 'none';
     if (id !== 'home') {
@@ -1305,6 +1310,7 @@
       if (id === 'political') startPolitical();
       if (id === 'health') showHealthTip();
       if (id === 'contact') renderContact();
+      if (id === 'game') renderGameMenu();
     } else {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     }
