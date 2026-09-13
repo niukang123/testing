@@ -1216,6 +1216,31 @@
     melancholic: "细腻、敏感、善于思考，对自我要求高，内心世界丰富，但容易多虑。"
   };
 
+  // 气质详解（用于测试须知页）
+  const traitDetail = {
+    sanguine: {
+      keywords: "热情 · 开朗 · 灵活",
+      strengths: "善于活跃气氛，适应新环境快，人际交往自然，点子多。",
+      watch: "注意力容易转移，做事有时不够持久。"
+    },
+    choleric: {
+      keywords: "果断 · 行动力强 · 目标导向",
+      strengths: "执行力强，敢于拍板，困难面前不退缩，能带动团队前进。",
+      watch: "有时候过于直接，容易忽略他人的节奏和感受。"
+    },
+    phlegmatic: {
+      keywords: "沉稳 · 耐心 · 情绪稳定",
+      strengths: "不轻易慌乱，能长期坚持一件事，是团队里的稳定力量。",
+      watch: "变化来临时反应偏慢，容易习惯性回避冲突。"
+    },
+    melancholic: {
+      keywords: "细腻 · 深思 · 高标准",
+      strengths: "观察入微，逻辑感强，对品质要求高，擅长深度思考与创作。",
+      watch: "容易自我要求过高，多想、内耗。"
+    }
+  };
+
+
   const politicalTypes = {
     socialist: { name: "社会主义倾向", desc: "强调经济平等与集体福祉，主张以公有制或强力公共调节来保障民生与分配公平。" },
     liberal: { name: "温和自由派倾向", desc: "重视个人权利、社会进步与机会公平，认为在市场经济及公民自由的框架内应兼顾社会关怀。" },
@@ -1316,8 +1341,51 @@
     }
   }
 
-  /* ---------- 性格测试 ---------- */
+  /* ---------- 性格测试：测试须知 ---------- */
   function startNature() {
+    const body = document.getElementById('natureBody');
+    const order = ['sanguine', 'choleric', 'phlegmatic', 'melancholic'];
+    body.innerHTML = `
+      <div style="background:#f8fafc;border-left:4px solid #0984e3;border-radius:8px;padding:14px 16px;margin-bottom:22px;">
+        <p style="font-weight:600;margin-bottom:8px;">请先阅读以下说明</p>
+        <ul style="padding-left:20px;color:#636e72;line-height:1.9;font-size:0.95rem;">
+          <li>本测试会从题库中<b>随机抽取 20 题</b>，请凭第一反应作答。</li>
+          <li>没有标准答案，也没有对错，不需要反复斟酌。</li>
+          <li>请在安静的环境下完成，大约需要 3–5 分钟。</li>
+          <li>结果仅用于自我了解，不作为任何诊断或评价依据。</li>
+        </ul>
+      </div>
+      <p style="font-weight:600;margin-bottom:12px;">四种气质的特点</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:22px;">
+        ${order.map(k => `
+          <div style="background:#f8fafc;border-radius:12px;padding:16px;">
+            <div style="font-weight:600;font-size:1.05rem;margin-bottom:4px;">${natureTraits[k]}</div>
+            <div style="color:#0984e3;font-size:0.85rem;margin-bottom:10px;">${traitDetail[k].keywords}</div>
+            <div style="font-size:0.9rem;line-height:1.75;color:#2d3436;margin-bottom:8px;">
+              <b>优势：</b>${traitDetail[k].strengths}
+            </div>
+            <div style="font-size:0.9rem;line-height:1.75;color:#636e72;">
+              <b>可能要注意：</b>${traitDetail[k].watch}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      <div style="background:#fff8e6;border-left:4px solid #f1c40f;border-radius:8px;padding:14px 16px;margin-bottom:26px;">
+        <p style="font-weight:600;margin-bottom:6px;">四种气质没有好坏之分</p>
+        <p style="color:#636e72;line-height:1.9;font-size:0.95rem;">
+          气质是与生俱来的神经活动类型，不是优点也不是缺点。多血质的人擅长带动气氛，胆汁质的人擅长推进事情，
+          粘液质的人擅长稳定持久，抑郁质的人擅长深入思考。大多数人都是几种气质的组合，只是比例不同。
+          测试结果只是帮你更了解自己，请不要用它给自己或别人贴标签。
+        </p>
+      </div>
+      <div style="text-align:center;">
+        <button class="btn" style="margin-top:0;" onclick="beginNatureTest()">我已了解，开始测试</button>
+      </div>
+    `;
+  }
+  /* ---------- 性格测试：正式答题 ---------- */
+  function beginNatureTest() {
+    const body = document.getElementById('natureBody');
     const body = document.getElementById('natureBody');
     const questions = shuffle(natureQuestions).slice(0, Math.min(20, natureQuestions.length));
     const totals = { sanguine: 0, choleric: 0, phlegmatic: 0, melancholic: 0 };
