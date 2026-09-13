@@ -1341,7 +1341,7 @@
     }
   }
 
-  /* ---------- 性格测试：测试须知 ---------- */
+  /* ---------- 性格测试：测试须知与模式选择 ---------- */
   function startNature() {
     const body = document.getElementById('natureBody');
     const order = ['sanguine', 'choleric', 'phlegmatic', 'melancholic'];
@@ -1349,10 +1349,10 @@
       <div style="background:#f8fafc;border-left:4px solid #0984e3;border-radius:8px;padding:14px 16px;margin-bottom:22px;">
         <p style="font-weight:600;margin-bottom:8px;">请先阅读以下说明</p>
         <ul style="padding-left:20px;color:#636e72;line-height:1.9;font-size:0.95rem;">
-          <li>本测试会从题库中<b>随机抽取 20 题</b>，请凭第一反应作答。</li>
-          <li>没有标准答案，也没有对错，不需要反复斟酌。</li>
-          <li>请在安静的环境下完成，大约需要 3–5 分钟。</li>
-          <li>结果仅用于自我了解，不作为任何诊断或评价依据。</li>
+          <li><b>粗略测试</b>：从题库中随机抽取 20 题，约 3 分钟。</li>
+          <li><b>精准测试</b>：完成全部 50 题，约 6–8 分钟，结果更稳定。</li>
+          <li>请凭第一反应作答，没有标准答案，也没有对错。</li>
+          <li>请在安静的环境下完成，结果仅用于自我了解。</li>
         </ul>
       </div>
       <p style="font-weight:600;margin-bottom:12px;">四种气质的特点</p>
@@ -1370,16 +1370,32 @@
           </div>
         `).join('')}
       </div>
-      <div style="background:#fff8e6;border-left:4px solid #f1c40f;border-radius:8px;padding:14px 16px;margin-bottom:26px;">
+      <div style="background:#fff8e6;border-left:4px solid #f1c40f;border-radius:8px;padding:14px 16px;margin-bottom:22px;">
         <p style="font-weight:600;margin-bottom:6px;">四种气质没有好坏之分</p>
         <p style="color:#636e72;line-height:1.9;font-size:0.95rem;">
-          气质是与生俱来的神经活动类型，不是优点也不是缺点。多血质的人擅长带动气氛，胆汁质的人擅长推进事情，
+          气质是与生俱来的神经活动倾向，不是优点也不是缺点。多血质的人擅长带动气氛，胆汁质的人擅长推进事情，
           粘液质的人擅长稳定持久，抑郁质的人擅长深入思考。大多数人都是几种气质的组合，只是比例不同。
           测试结果只是帮你更了解自己，请不要用它给自己或别人贴标签。
         </p>
       </div>
-      <div style="text-align:center;">
-        <button class="btn" style="margin-top:0;" onclick="beginNatureTest()">我已了解，开始测试</button>
+      <div style="background:#f0f7ff;border-left:4px solid #0984e3;border-radius:8px;padding:14px 16px;margin-bottom:26px;">
+        <p style="font-weight:600;margin-bottom:6px;">题库来源与局限说明</p>
+        <p style="color:#636e72;line-height:1.9;font-size:0.9rem;">
+          气质四类型的理论源头，是古希腊希波克拉底与盖伦提出的「四体液说」。现代生理学已不再支持
+          体液与气质的对应关系，这套框架目前更多作为一种通俗描述存在。
+          本测试参照的是巴甫洛夫在《人和动物的高级神经活动类型》（1935）中提出的
+          <b>高级神经活动类型学说</b>——强而不平衡型对应胆汁质，强而平衡灵活型对应多血质，
+          强而平衡惰性型对应粘液质，弱型对应抑郁质。
+          <br><br>
+          <b>需要说明的是</b>：本测试的题目为本站依据上述理论框架自行编制，
+          <b>不是经过标准化和常模校准的心理测量工具</b>，不具备诊断或临床评估效度，
+          结果仅供自我参照。如需严格的科学测评，请参考大五人格问卷（NEO-PI-R）、
+          艾森克人格问卷（EPQ）或斯特里劳气质调查表（STI-R）等已有实证支持的工具。
+        </p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+        <button class="btn" style="margin-top:0;" onclick="beginNatureTest('brief')">粗略测试（20 题）</button>
+        <button class="btn" style="margin-top:0;background:#fff;color:#0984e3;border:1.5px solid #0984e3;" onclick="beginNatureTest('full')">精准测试（全部 50 题）</button>
       </div>
     `;
   }
