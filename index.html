@@ -208,6 +208,11 @@
       <div class="card-title">心理健康小知识</div>
       <div class="card-desc">每天一条心理学小知识，从 50 条中轮换。</div>
     </div>
+      <div class="card" onclick="showView('mbti')">
+      <div class="card-icon">🧩</div>
+      <div class="card-title">16 型人格测试</div>
+      <div class="card-desc">基于荣格类型学框架，测量你的四个维度倾向。</div>
+    </div>
     <div class="card" onclick="showView('game')">
       <div class="card-icon">🎮</div>
       <div class="card-title">心理小游戏</div>
@@ -257,7 +262,14 @@
     <h2>📮 联系我们</h2>
     <div id="contactBody"></div>
   </div>
-
+  
+  <!-- 16 型人格测试视图 -->
+  <div id="mbtiView" class="view">
+    <button class="back-btn" onclick="showView('home')">← 返回首页</button>
+    <h2>🧩 16 型人格测试</h2>
+    <div id="mbtiBody"></div>
+  </div>
+  
   <!-- 心理小游戏视图 -->
   <div id="gameView" class="view">
     <button class="back-btn" onclick="showView('home')">← 返回首页</button>
@@ -931,6 +943,76 @@
     ],
     note: "遇到任何心理问题，及时找我们，我们永远在这里。"
   };
+    /* ---------- 16 型人格测试数据 ---------- */
+
+  // 每个维度 8 题，共 32 题。每题二选一，分别对应两端。
+  const mbtiQuestions = [
+    // ===== E / I =====
+    { dim: "EI", a: { text: "出门见朋友、参加活动", v: "E" }, b: { text: "待在家独处、做自己的事", v: "I" } },
+    { dim: "EI", a: { text: "人越多越有劲", v: "E" }, b: { text: "人多了就想找个安静的角落", v: "I" } },
+    { dim: "EI", a: { text: "找人聊聊，说出来会好受些", v: "E" }, b: { text: "自己先消化，想通了再说", v: "I" } },
+    { dim: "EI", a: { text: "想到什么就说什么", v: "E" }, b: { text: "想清楚了再开口", v: "I" } },
+    { dim: "EI", a: { text: "开放、多人协作的环境", v: "E" }, b: { text: "安静、能独立工作的环境", v: "I" } },
+    { dim: "EI", a: { text: "很快就能和人熟起来", v: "E" }, b: { text: "有点慢热，需要时间", v: "I" } },
+    { dim: "EI", a: { text: "社交完还意犹未尽", v: "E" }, b: { text: "社交完有点耗电，需要缓一缓", v: "I" } },
+    { dim: "EI", a: { text: "边说边想，说着说着就清楚了", v: "E" }, b: { text: "先在脑子里过一遍，再说", v: "I" } },
+
+    // ===== S / N =====
+    { dim: "SN", a: { text: "具体的事实、细节和数据", v: "S" }, b: { text: "背后的模式和整体含义", v: "N" } },
+    { dim: "SN", a: { text: "自己的经验和亲身验证", v: "S" }, b: { text: "直觉和联想带来的预感", v: "N" } },
+    { dim: "SN", a: { text: "写实的、细节丰富的作品", v: "S" }, b: { text: "有隐喻和想象空间的作品", v: "N" } },
+    { dim: "SN", a: { text: "具体该怎么一步步做", v: "S" }, b: { text: "它未来可能变成什么", v: "N" } },
+    { dim: "SN", a: { text: "他说了哪些具体的事", v: "S" }, b: { text: "他真正想表达的是什么", v: "N" } },
+    { dim: "SN", a: { text: "步骤清晰的说明书", v: "S" }, b: { text: "大方向的框架和原则", v: "N" } },
+    { dim: "SN", a: { text: "不太感兴趣，还是说点实际的", v: "S" }, b: { text: "经常自己就会想这些", v: "N" } },
+    { dim: "SN", a: { text: "当时的样子、具体场景", v: "S" }, b: { text: "它给我的整体感觉", v: "N" } },
+
+    // ===== T / F =====
+    { dim: "TF", a: { text: "逻辑上站不站得住", v: "T" }, b: { text: "它对人的影响是什么", v: "F" } },
+    { dim: "TF", a: { text: "帮他分析原因、给建议", v: "T" }, b: { text: "先回应他的情绪，陪着他说", v: "F" } },
+    { dim: "TF", a: { text: "谁的论证更严谨", v: "T" }, b: { text: "会不会伤到彼此的关系", v: "F" } },
+    { dim: "TF", a: { text: "直接指出问题在哪", v: "T" }, b: { text: "先说做得好的地方，再谈问题", v: "F" } },
+    { dim: "TF", a: { text: "规则对所有人都一样", v: "T" }, b: { text: "每个人的具体情况不一样", v: "F" } },
+    { dim: "TF", a: { text: "效率最高的那个方案", v: "T" }, b: { text: "大家都能接受的那个方案", v: "F" } },
+    { dim: "TF", a: { text: "指出错误，并分析为什么会错", v: "T" }, b: { text: "先想他为什么会这样做", v: "F" } },
+    { dim: "TF", a: { text: "「这个方案逻辑上有问题」", v: "T" }, b: { text: "「我能理解你现在的处境」", v: "F" } },
+
+    // ===== J / P =====
+    { dim: "JP", a: { text: "提前把行程安排好", v: "J" }, b: { text: "到了再说，随遇而安", v: "P" } },
+    { dim: "JP", a: { text: "列好清单，一项项完成", v: "J" }, b: { text: "看当时状态灵活处理", v: "P" } },
+    { dim: "JP", a: { text: "提前做完，留出余量", v: "J" }, b: { text: "临近截止时集中冲刺", v: "P" } },
+    { dim: "JP", a: { text: "稳定、有秩序", v: "J" }, b: { text: "开放、随时可能有变化", v: "P" } },
+    { dim: "JP", a: { text: "决定了就不太会改", v: "J" }, b: { text: "随时可能调整方向", v: "P" } },
+    { dim: "JP", a: { text: "有点烦，打乱了原有计划", v: "J" }, b: { text: "挺好，多了点新鲜感", v: "P" } },
+    { dim: "JP", a: { text: "整齐有序，各归其位", v: "J" }, b: { text: "有点乱，但我知道东西在哪", v: "P" } },
+    { dim: "JP", a: { text: "事情尘埃落定的踏实感", v: "J" }, b: { text: "一切还有可能的开放感", v: "P" } }
+  ];
+
+  const MBTI_META = {
+    EI: { pos: "E", neg: "I", posName: "外向", negName: "内向", posDesc: "从外部世界和人际互动中获取能量", negDesc: "从独处和内在世界中恢复能量" },
+    SN: { pos: "S", neg: "N", posName: "实感", negName: "直觉", posDesc: "关注具体事实、细节和当下经验", negDesc: "关注模式、可能性和未来指向" },
+    TF: { pos: "T", neg: "F", posName: "思考", negName: "情感", posDesc: "以逻辑和一致性作为判断依据", negDesc: "以人的感受和关系和谐作为判断依据" },
+    JP: { pos: "J", neg: "P", posName: "判断", negName: "知觉", posDesc: "喜欢计划、秩序与事情有结论", negDesc: "喜欢灵活、开放与保留选择权" }
+  };
+
+  const MBTI_TYPES = {
+    ISTJ: { nick: "务实守卫者", desc: "重事实、讲责任、做事有章法。你倾向于把承诺当回事，喜欢按已验证的方式把事情做扎实。在需要稳定和可靠性的位置上，你是那种让人放心的存在。" },
+    ISFJ: { nick: "温和守护者", desc: "细心、体贴、默默承担。你常常先注意到别人的需要，把照顾他人当成自然的事。你不喜欢张扬，但你做的事往往让人在很久之后还记得。" },
+    INFJ: { nick: "理想洞察者", desc: "对人内心敏感，对意义有执着的追求。你常能察觉到别人没说出口的东西，也希望自己做的事能带来真实的改变。你需要的不是热闹，而是深度。" },
+    INTJ: { nick: "系统构建者", desc: "独立思考、长于规划、看重效率。你习惯从全局推演，不太受现成结论约束。对你来说，把一件事想透，比说服别人更重要。" },
+    ISTP: { nick: "冷静实干者", desc: "动手能力强，遇事沉着。你对事物怎么运作有兴趣，不太喜欢空谈。真出问题时，你往往是那个安静地把问题解决掉的人。" },
+    ISFP: { nick: "随性体验者", desc: "感受细腻、审美敏锐、活在当下。你不喜欢被规则捆住，更愿意按自己的节奏走。你对美和真实的感受，往往比语言表达得更清楚。" },
+    INFP: { nick: "理想调停者", desc: "内心世界丰富，重视真诚与价值。你很难为不认同的事投入，但一旦认同，会非常坚定。你需要的是一个能让你做自己的空间。" },
+    INTP: { nick: "逻辑探索者", desc: "好奇心重、喜欢抽象思考、追求逻辑自洽。你乐于拆解概念，也常常在自己的思维里待得很舒服。你需要的不是答案，而是问题本身足够有趣。" },
+    ESTP: { nick: "行动派", desc: "反应快、敢下手、喜欢直接体验。你不太喜欢冗长的讨论，更愿意边做边调整。在需要临场应变的场合，你比大多数人都从容。" },
+    ESFP: { nick: "热情体验者", desc: "开朗、有感染力、重视当下。你容易让别人放松下来，也常常是气氛的带动者。对你来说，生活的质感比长远规划更真实。" },
+    ENFP: { nick: "热情连接者", desc: "有想象力、善于发现人和想法之间的联系。你对新鲜事物充满热情，也喜欢鼓励别人。你的挑战不在起步，而在收尾。" },
+    ENTP: { nick: "好奇挑战者", desc: "思维敏捷、喜欢辩论、乐于探索可能性。你不太接受「一直就是这样的」，更想看看还能不能更好。你需要的空间是不被过早打断。" },
+    ESTJ: { nick: "组织推动者", desc: "目标明确、执行有力、重视效率。你擅长把混乱变成条理，也很自然地承担起组织的角色。对你来说，把事情做成比说得好听重要。" },
+    ESFJ: { nick: "热心协调者", desc: "重视和谐、乐于照顾他人、善于把大家聚在一起。你常能察觉到气氛的变化，并主动做点什么。你付出很多，也需要注意自己的消耗。" },
+    ENFJ: { nick: "鼓舞引导者", desc: "有感染力、善于激励、关注他人成长。你希望身边的人变得更好，也愿意为此花心思。你的能量来自看到别人被点亮。" },
+    ENTJ: { nick: "目标领导者", desc: "果断、有全局观、擅长把目标拆成路径。你不怕做决定，也不回避责任。对你来说，长期最有价值的不是舒适，而是不断靠近你想要的结果。" }
+  };
   /* ------------------------ 核心逻辑 ------------------------ */
 
  // 已雪藏板块：恢复时从数组中移除对应 id 即可
@@ -949,6 +1031,7 @@
       if (id === 'health') showHealthTip();
       if (id === 'contact') renderContact();
       if (id === 'game') renderGameMenu();
+      if (id === 'mbti') startMbti();
     } else {
       document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     }
@@ -1224,6 +1307,192 @@
       ${rows}
       <p style="margin-top:24px;color:#b2bec3;font-size:0.85rem;text-align:center;">${contactInfo.note}</p>
     `;
+  }
+  /* ---------- 16 型人格测试：须知页 ---------- */
+  function startMbti() {
+    const body = document.getElementById('mbtiBody');
+
+    body.innerHTML = `
+      <div style="background:#f8fafc;border-left:4px solid #0984e3;border-radius:8px;padding:14px 16px;margin-bottom:22px;">
+        <p style="font-weight:600;margin-bottom:8px;">请先阅读以下说明</p>
+        <ul style="padding-left:20px;color:#636e72;line-height:1.9;font-size:0.95rem;">
+          <li><b>粗略测试</b>：每维度抽 3 题，共 12 题，约 2 分钟。</li>
+          <li><b>精准测试</b>：完成全部 32 题，约 5–6 分钟，结果更稳定。</li>
+          <li>每题二选一，<b>请选择更接近你本能反应的那一项</b>。</li>
+          <li>如果两项都符合，请选你更常表现出的那一种。</li>
+        </ul>
+      </div>
+
+      <p style="font-weight:600;margin-bottom:12px;">测试测量的四个维度</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:22px;">
+        ${Object.keys(MBTI_META).map(k => {
+          const m = MBTI_META[k];
+          return `
+            <div style="background:#f8fafc;border-radius:12px;padding:16px;">
+              <div style="font-weight:600;margin-bottom:8px;">${m.posName}（${m.pos}） / ${m.negName}（${m.neg}）</div>
+              <div style="font-size:0.88rem;color:#636e72;line-height:1.7;">
+                <b style="color:#0984e3;">${m.pos}</b>：${m.posDesc}<br>
+                <b style="color:#0984e3;">${m.neg}</b>：${m.negDesc}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+
+      <div style="background:#fff8e6;border-left:4px solid #f1c40f;border-radius:8px;padding:14px 16px;margin-bottom:22px;">
+        <p style="font-weight:600;margin-bottom:6px;">四个维度没有好坏之分</p>
+        <p style="color:#636e72;line-height:1.9;font-size:0.95rem;">
+          每个维度只是描述了你在某一端的倾向，不代表能力高低。比如内向不等于不善交际，
+          外向也不等于不擅长独处。多数人处在中间地带，只是偏向其中一侧多一点。
+          测试的意义是帮你理解自己的偏好，而不是给你一个固定的标签。
+        </p>
+      </div>
+
+      <div style="background:#f0f7ff;border-left:4px solid #0984e3;border-radius:8px;padding:14px 16px;margin-bottom:26px;">
+        <p style="font-weight:600;margin-bottom:6px;">来源与局限说明</p>
+        <p style="color:#636e72;line-height:1.9;font-size:0.9rem;">
+          本测试的<b>理论框架</b>源自荣格 1921 年的《心理类型》，以及 Katharine Briggs 与
+          Isabel Myers 在 1940 年代发展的四维度类型学。
+          <br><br>
+          <b>需要说明的是</b>：<b>MBTI 是 The Myers-Briggs Company 的注册商标</b>，
+          其官方问卷受版权保护。本测试<b>不是官方 MBTI，也不是任何现有标准量表</b>，
+          题目为本站依据上述理论框架自行编制，未经信效度检验，没有常模数据。
+          <b>结果不具备诊断或专业评估效度</b>，仅供自我探索与了解参照。
+          <br><br>
+          此外需提醒：在学术心理学界，MBTI 的重测信度和二分法的合理性长期存在争议，
+          主流研究更常使用大五人格模型。如果你希望获得更严格的结果，建议参考
+          NEO-PI-R、IPIP-NEO 等已有实证支持的工具。
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;">
+        <button class="btn" style="margin-top:0;" onclick="beginMbtiTest('brief')">粗略测试（12 题）</button>
+        <button class="btn" style="margin-top:0;background:#fff;color:#0984e3;border:1.5px solid #0984e3;" onclick="beginMbtiTest('full')">精准测试（全部 32 题）</button>
+      </div>
+    `;
+  }
+
+  /* ---------- 16 型人格测试：正式答题 ---------- */
+  function beginMbtiTest(mode) {
+    const body = document.getElementById('mbtiBody');
+
+    // 选题
+    let picked;
+    if (mode === 'full') {
+      picked = shuffle(mbtiQuestions.slice());
+    } else {
+      const byDim = { EI: [], SN: [], TF: [], JP: [] };
+      mbtiQuestions.forEach(item => byDim[item.dim].push(item));
+      let chosen = [];
+      Object.keys(byDim).forEach(d => {
+        chosen = chosen.concat(shuffle(byDim[d]).slice(0, 3));
+      });
+      picked = shuffle(chosen);
+    }
+
+    const answers = new Array(picked.length).fill(null);
+    let idx = 0;
+
+    function renderQ() {
+      if (idx >= picked.length) {
+        showResult();
+        return;
+      }
+      const item = picked[idx];
+      body.innerHTML = `
+        <div class="progress"><div class="progress-fill" style="width:${(idx / picked.length) * 100}%"></div></div>
+        <div class="question">
+          <p class="question-text">第 ${idx + 1} 题 / 共 ${picked.length} 题</p>
+          <p class="question-text">下面哪一项更接近你？</p>
+          <button class="option" onclick="answerMbti('a')">${item.a.text}</button>
+          <button class="option" onclick="answerMbti('b')">${item.b.text}</button>
+        </div>
+      `;
+    }
+
+    window.answerMbti = function (side) {
+      const item = picked[idx];
+      answers[idx] = item[side].v;
+      idx++;
+      renderQ();
+    };
+
+    function showResult() {
+      // 统计每个维度两端的次数
+      const counts = {
+        E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0
+      };
+      answers.forEach(v => {
+        if (v) counts[v] += 1;
+      });
+
+      const dimResult = {};
+      const typeLetters = [];
+      Object.keys(MBTI_META).forEach(k => {
+        const m = MBTI_META[k];
+        const posCount = counts[m.pos];
+        const negCount = counts[m.neg];
+        const total = posCount + negCount;
+        const posPct = total === 0 ? 50 : Math.round((posCount / total) * 100);
+        const winner = posCount >= negCount ? m.pos : m.neg;
+        typeLetters.push(winner);
+        dimResult[k] = {
+          pos: m.pos, neg: m.neg,
+          posName: m.posName, negName: m.negName,
+          posCount, negCount, posPct,
+          winner
+        };
+      });
+
+      const typeCode = typeLetters.join('');
+      const typeInfo = MBTI_TYPES[typeCode] || { nick: "未知类型", desc: "" };
+
+      const dimBars = Object.keys(MBTI_META).map(k => {
+        const d = dimResult[k];
+        return `
+          <div style="margin:16px 0;">
+            <div style="display:flex;justify-content:space-between;font-size:0.88rem;color:#636e72;margin-bottom:6px;">
+              <span style="font-weight:600;color:${d.winner === d.pos ? '#0984e3' : '#b2bec3'};">${d.pos} ${d.posName}</span>
+              <span style="font-weight:600;color:${d.winner === d.neg ? '#0984e3' : '#b2bec3'};">${d.negName} ${d.neg}</span>
+            </div>
+            <div style="display:flex;height:10px;border-radius:5px;overflow:hidden;background:#eef2f6;">
+              <div style="width:${d.posPct}%;background:#0984e3;"></div>
+              <div style="flex:1;background:#dfe6e9;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#b2bec3;margin-top:4px;">
+              <span>${d.posCount} 次</span>
+              <span>${d.negCount} 次</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      body.innerHTML = `
+        <div class="result-box">
+          <h3>🎉 测试完成</h3>
+          <div class="result-title" style="font-size:2.4rem;letter-spacing:2px;">${typeCode}</div>
+          <p style="color:#0984e3;font-size:1.05rem;margin-top:-4px;">${typeInfo.nick}</p>
+          <p class="result-desc" style="margin-top:16px;">${typeInfo.desc}</p>
+
+          <div style="max-width:480px;margin:32px auto 0;text-align:left;">
+            <p style="font-weight:600;margin-bottom:4px;">四个维度的倾向</p>
+            ${dimBars}
+          </div>
+
+          <p style="margin-top:24px;color:#b2bec3;font-size:0.82rem;line-height:1.7;max-width:520px;margin-left:auto;margin-right:auto;">
+            本次共作答 ${picked.length} 题 · ${mode === 'full' ? '精准模式' : '粗略模式'}<br>
+            本测试为自行编制，非官方 MBTI，结果仅供自我参照，不构成任何评估结论。
+          </p>
+
+          <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn" style="margin-top:0;" onclick="startMbti()">重新测试</button>
+            <button class="btn" style="margin-top:0;background:#dfe6e9;color:#2d3436;" onclick="showView('home')">返回首页</button>
+          </div>
+        </div>
+      `;
+    }
+
+    renderQ();
   }
   /* ---------- 心理小游戏 ---------- */
 
