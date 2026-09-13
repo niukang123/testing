@@ -1016,119 +1016,112 @@
       </div>
     `;
   }
-  /* ---------- 性格测试：正式答题 ---------- */
-  function beginNatureTest(mode) {
+  /* ---------- 气质测试：正式答题 ---------- */
+  function beginTemperamentTest(mode) {
     const body = document.getElementById('natureBody');
-    const count = (mode === 'full') ? natureQuestions.length : 20;
-    const questions = shuffle(natureQuestions).slice(0, count);
-    const totals = { sanguine: 0, choleric: 0, phlegmatic: 0, melancholic: 0 };
+
+    // 选题
+    let picked;
+    if (mode === 'full') {
+      picked = shuffle(temperamentItems.slice());
+    } else {
+      const byDim = { sanguine: [], choleric: [], phlegmatic: [], melancholic: [] };
+      temperamentItems.forEach(item => byDim[item.dim].push(item));
+      let chosen = [];
+      Object.keys(byDim).forEach(d => {
+        chosen = chosen.concat(shuffle(byDim[d]).slice(0, 5));
+      });
+      picked = shuffle(chosen);
+    }
+
+    const answers = new Array(picked.length).fill(0);
+    const scaleLabels = ["很符合", "比较符合", "说不准", "不太符合", "完全不符合"];
+    const scaleValues = [2, 1, 0, -1, -2];
     let idx = 0;
 
     function renderQ() {
-      if (idx >= questions.length) {
-        const sorted = Object.entries(totals).sort((a, b) => b[1] - a[1]);
-        const top = sorted[0][0];
-        const total = questions.length;
-
-        const bars = sorted.map(([k, v]) => {
-          const pct = Math.round((v / total) * 100);
-          return `
-            <div style="margin:10px 0;">
-              <div style="display:flex;justify-content:space-between;font-size:0.9rem;color:#636e72;margin-bottom:4px;">
-                <span>${natureTraits[k]}</span>
-                <span>${pct}%</span>
-              </div>
-              <div style="height:8px;background:#eef2f6;border-radius:4px;overflow:hidden;">
-                <div style="height:100%;width:${pct}%;background:${k === top ? '#0984e3' : '#b2bec3'};border-radius:4px;"></div>
-              </div>
-            </div>
-          `;
-        }).join('');
-
-        body.innerHTML = `
-          <div class="result-box">
-            <h3>🎉 测试完成</h3>
-            <div class="result-title">${natureTraits[top]}</div>
-            <p class="result-desc">${traitDesc[top]}</p>
-            <div style="max-width:420px;margin:24px auto 0;text-align:left;">
-              ${bars}
-            </div>
-            <p style="margin-top:20px;color:#b2bec3;font-size:0.85rem;">
-              本次共作答 ${total} 题 · ${mode === 'full' ? '精准模式' : '粗略模式'}
-            </p>
-            <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-              <button class="btn" style="margin-top:0;" onclick="startNature()">重新测试</button>
-              <button class="btn" style="margin-top:0;background:#dfe6e9;color:#2d3436;" onclick="showView('home')">返回首页</button>
-            </div>
-          </div>
-        `;
+      if (idx >= picked.length) {
+        showResult();
         return;
       }
-      const q = questions[idx];
+      const item = picked[idx];
       body.innerHTML = `
-        <div class="progress"><div class="progress-fill" style="width:${(idx / questions.length) * 100}%"></div></div>
+        <div class="progress"><div class="progress-fill" style="width:${(idx / picked.length) * 100}%"></div></div>
         <div class="question">
-          <p class="question-text">第 ${idx + 1} 题 / 共 ${questions.length} 题</p>
-          <p class="question-text">${q.q}</p>
-          ${q.options.map((opt, i) => `
-            <button class="option" onclick="pickNature(${i})">${String.fromCharCode(65 + i)}. ${opt.text}</button>
+          <p class="question-text">第 ${idx + 1} 题 / 共 ${picked.length} 题</p>
+          <p class="question-text">${item.text}</p>
+          ${scaleLabels.map((label, i) => `
+            <button class="option" onclick="answerTemperament(${i})">${label}</button>
           `).join('')}
         </div>
       `;
-      window._currentQ = questions[idx];
     }
 
-    window.pickNature = function (optIndex) {
-      const chosen = window._currentQ.options[optIndex];
-      totals[chosen.trait] = (totals[chosen.trait] || 0) + 1;
+    window.answerTemperament = function (optIdx) {
+      answers[idx] = scaleValues[optIdx];
       idx++;
       renderQ();
     };
 
-    renderQ();
-  }
+    function showResult() {
+      const totals = { sanguine: 0, choleric: 0, phlegmatic: 0, melancholic: 0 };
+      picked.forEach((item, i) => {
+        totals[item.dim] += answers[i];
+      });
 
-    function renderQ() {
-      if (idx >= questions.length) {
-        const sorted = Object.entries(totals).sort((a,b) => b[1] - a[1]);
-        const top = sorted[0][0];
-        body.innerHTML = `
-          <div class="result-box">
-            <h3>🎉 测试完成</h3>
-            <div class="result-title">${natureTraits[top]}</div>
-            <p class="result-desc">${traitDesc[top]}</p>
-            <p style="margin-top:20px;color:#b2bec3;font-size:0.9rem">
-              ${Object.entries(totals).map(([k,v]) => `${natureTraits[k]}: ${v} 题`).join(' · ')}
-            </p>
-            <button class="btn" onclick="showView('home')">返回首页</button>
+      const maxPerDim = mode === 'full' ? 30 : 10;
+      const sorted = Object.entries(totals).sort((a, b) => b[1] - a[1]);
+      const first = sorted[0], second = sorted[1];
+      const gap = first[1] - second[1];
+      const threshold = mode === 'full' ? 5 : 2;
+
+      let typeName, typeDesc;
+      if (first[1] <= 0) {
+        typeName = "中间型（均衡型）";
+        typeDesc = "四个维度的得分都比较低，没有明显占优的气质。这类人通常在不同情境下能表现出不同风格，适应面较广。";
+      } else if (gap >= threshold) {
+        typeName = natureTraits[first[0]] + "（典型）";
+        typeDesc = traitDesc[first[0]];
+      } else {
+        typeName = natureTraits[first[0]] + " — " + natureTraits[second[0]] + " 混合型";
+        typeDesc = "你在两种气质上都有较明显的倾向。这类人往往兼具两种风格的特点，在不同场合会表现出不同的一面。";
+      }
+
+      const bars = sorted.map(([k, v]) => {
+        const pct = Math.max(0, Math.round((v / maxPerDim) * 100));
+        return `
+          <div style="margin:12px 0;">
+            <div style="display:flex;justify-content:space-between;font-size:0.9rem;color:#636e72;margin-bottom:4px;">
+              <span>${natureTraits[k]}</span>
+              <span>${v} 分</span>
+            </div>
+            <div style="height:8px;background:#eef2f6;border-radius:4px;overflow:hidden;">
+              <div style="height:100%;width:${pct}%;background:${k === first[0] ? '#0984e3' : '#b2bec3'};border-radius:4px;"></div>
+            </div>
           </div>
         `;
-        return;
-      }
-      const q = questions[idx];
+      }).join('');
+
       body.innerHTML = `
-        <div class="progress"><div class="progress-fill" style="width:${(idx/questions.length)*100}%"></div></div>
-        <div class="question">
-          <p class="question-text">第 ${idx+1} 题 / 共 ${questions.length} 题</p>
-          <p class="question-text">${q.q}</p>
-          ${q.options.map((opt, i) => `
-            <button class="option" onclick="pickNature(${i})">${String.fromCharCode(65+i)}. ${opt.text}</button>
-          `).join('')}
+        <div class="result-box">
+          <h3>🎉 测试完成</h3>
+          <div class="result-title">${typeName}</div>
+          <p class="result-desc">${typeDesc}</p>
+          <div style="max-width:420px;margin:24px auto 0;text-align:left;">
+            ${bars}
+          </div>
+          <p style="margin-top:20px;color:#b2bec3;font-size:0.85rem;">
+            本次共作答 ${picked.length} 题 · ${mode === 'full' ? '精准模式' : '粗略模式'}
+          </p>
+          <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn" style="margin-top:0;" onclick="showView('home')">返回首页</button>
+          </div>
         </div>
       `;
-      window._currentQ = questions[idx];
     }
-
-    window.pickNature = function(optIndex) {
-      const chosen = window._currentQ.options[optIndex];
-      totals[chosen.trait] = (totals[chosen.trait] || 0) + 1;
-      idx++;
-      renderQ();
-    };
 
     renderQ();
   }
-
   /* ---------- 政治倾向测试 ---------- */
   function startPolitical() {
     const body = document.getElementById('politicalBody');
