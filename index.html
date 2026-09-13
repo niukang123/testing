@@ -1212,6 +1212,73 @@
     moderate: { name: "中间务实派", desc: "既不盲从某一主义，也不刻意对抗，强调在具体问题上采取平衡与试错式决策。" }
   };
 
+  // 4. 心理健康小知识（50 条，每天轮换一条）
+  const healthTips = [
+    { title: "蔡格尼克效应", content: "相比已经完成的任务，未完成的任务更容易在脑海里反复出现。把待办事项写下来，能让大脑暂时“放下”，减轻心理负担。" },
+    { title: "锚定效应", content: "人们会过度依赖最先接触到的信息。谈判或购物时，先提出自己的参考价，往往会影响后续的讨论范围。" },
+    { title: "确认偏差", content: "我们倾向于寻找、记住支持自己已有观点的信息，而忽略相反证据。主动问一句“有没有可能我错了”，是抵抗它最好的方式。" },
+    { title: "达克效应", content: "能力不足的人容易高估自己，而真正熟练的人反而常低估自己。在自己“很懂”的领域，多留一分自省。" },
+    { title: "旁观者效应", content: "现场人越多，个体出手相助的可能性反而越低，因为责任被分散了。求助时最好指定某一个人，而不是向人群喊话。" },
+    { title: "光环效应", content: "对一个人的某一印象（比如外貌好），会不自觉地扩散到对他能力、品格的判断上。评价他人时，要留意这种自动加分。" },
+    { title: "幸存者偏差", content: "我们只看到成功者的样本，却忽略了沉默的失败者。所以“成功人士的共同习惯”未必真的导致成功。" },
+    { title: "曝光效应", content: "仅仅因为反复接触某个事物，人就会对它产生好感。这就是为什么“坚持出现”本身，就能拉近关系。" },
+    { title: "首因效应与近因效应", content: "最先和最后出现的信息最容易被记住。做演讲或面试时，把最重要的内容放在开头和结尾。" },
+    { title: "罗森塔尔效应", content: "真诚的期待会让对方的表现真的变好。别人的期待在塑造我们，我们的期待也在塑造别人。" },
+    { title: "安慰剂效应", content: "即使是没有药效的“药”，只要人相信它有作用，身体也可能出现真实的改善。信念本身就有生理力量。" },
+    { title: "心流状态", content: "当挑战难度与个人技能刚好匹配时，人会进入全神贯注、忘记时间的状态。想更专注，就把任务难度调到“跳一跳够得着”。" },
+    { title: "认知失调", content: "当信念与行为冲突时，人会产生不适，并往往选择改变想法而不是改变行为。比如买了贵东西后，会更努力夸它好。" },
+    { title: "情绪标注", content: "把自己的情绪说出来或写下来（“我现在很焦虑”），能明显降低情绪的强度。命名本身，就是一种调节。" },
+    { title: "5-4-3-2-1 接地法", content: "极度焦虑时，依次说出 5 个看到的、4 个触到的、3 个听到的、2 个闻到的、1 个尝到的东西，能迅速把注意力拉回当下。" },
+    { title: "4-7-8 呼吸法", content: "吸气 4 秒、屏息 7 秒、缓慢呼气 8 秒。延长的呼气能激活副交感神经，帮助身体从紧张状态中放松下来。" },
+    { title: "睡眠周期约 90 分钟", content: "一个完整的睡眠周期约 90 分钟。按周期整数倍安排起床时间，往往比单纯睡够 8 小时更不容易昏沉。" },
+    { title: "注意力是有限资源", content: "高度专注的状态大约只能维持 25–50 分钟。用“专注—短休息”的循环，比硬撑更有效率。" },
+    { title: "微习惯", content: "把目标缩小到“几乎不可能失败”的程度，比如每天只做 1 个俯卧撑。启动比强度更重要，行动本身会带动更多行动。" },
+    { title: "损失厌恶", content: "失去 100 元的痛苦，通常大于得到 100 元的快乐。所以人们为了回避损失，常做出并不理性的选择。" },
+    { title: "沉没成本谬误", content: "已经投入的时间、金钱不该影响当下的决策。判断一件事是否继续，只看它未来的收益与代价。" },
+    { title: "延迟满足", content: "为了更大的长期回报而放弃眼前的小诱惑，是自控力的核心。把诱惑移出视线，比靠意志力硬扛更有效。" },
+    { title: "峰终定律", content: "人对一段经历的评价，主要取决于最强烈的那一刻和结束时的感受，而不是全程的平均值。" },
+    { title: "自我实现预言", content: "因为相信某件事会发生，人的行为会不自觉地促成它真的发生。想法会通过行动，变成现实。" },
+    { title: "情绪 ABC 理论", content: "让人痛苦的往往不是事件 A 本身，而是我们对它的看法 B，最终导致了情绪结果 C。改变解释，就能改变情绪。" },
+    { title: "习得性无助", content: "反复经历无法控制的失败后，人会放弃尝试，即使环境已经改变。察觉“我其实还有选择”，是走出来的第一步。" },
+    { title: "成长型思维", content: "把能力看作可以训练出来的，而不是天生固定的。这种信念会让人更愿意面对挑战、坚持更久。" },
+    { title: "社会比较", content: "人习惯和他人比较来评价自己，但社交平台展示的往往是他人的高光片段。和过去的自己比，比和别人比更有意义。" },
+    { title: "巴纳姆效应", content: "笼统而模糊的描述，会让人觉得很准、很懂自己。星座和部分“心灵测试”正利用了这一点。" },
+    { title: "虚假共识效应", content: "人会高估“别人也这么想”的比例，从而误以为自己站在多数一边。" },
+    { title: "遗忘曲线", content: "新学的知识在一天内遗忘最快。在学习后 24 小时内复习一次，记忆保持率会显著提高。" },
+    { title: "间隔重复", content: "把复习分散到越来越长的时间间隔中（1 天、3 天、7 天、30 天），比一次性集中背诵更牢固。" },
+    { title: "睡眠是记忆的存档时间", content: "深度睡眠期间，大脑会把白天学到的内容从临时存储转成长期记忆。熬夜背书，反而损失效率。" },
+    { title: "压力与皮质醇", content: "短期压力能提升表现，但长期高压会持续分泌皮质醇，损害睡眠、免疫和记忆力。恢复时间不是浪费，是必需。" },
+    { title: "正念呼吸", content: "不需要清空脑子，只需把注意力放在呼吸上，发现走神了就温和地拉回来。走神本身，就是练习的机会。" },
+    { title: "感恩练习", content: "每天写下 3 件值得感谢的小事，持续几周就能提升主观幸福感。关键在于具体，而不是宏大。" },
+    { title: "表达性写作", content: "把内心的困扰连续写 15–20 分钟，不修改、不评判。研究发现这能改善情绪状态和身体健康。" },
+    { title: "社会支持是最强的缓冲", content: "面对压力时，有一个可以倾诉的人，比任何技巧都更能保护心理健康。" },
+    { title: "心理边界", content: "边界不是冷漠，而是“哪些是我的责任、哪些不是”的清晰划分。没有边界的人，最容易疲惫和怨恨。" },
+    { title: "依恋类型", content: "早期依恋经验会影响成年后的人际模式。安全型的人既有亲密感，也能保持独立。依恋风格并非不可改变。" },
+    { title: "情绪劳动", content: "在工作中管理并伪装自己的情绪（如服务业的“必须微笑”）会消耗大量心理能量，是需要被正视的疲惫来源。" },
+    { title: "讽刺性反弹", content: "越刻意“不要去想”某件事，它反而越容易出现。换成“去做什么”的正面指令，比压抑更有效。" },
+    { title: "自我关怀的三个要素", content: "善待自己、认识到痛苦是共通的、以正念看待情绪而不被吞没。自我关怀不等于放纵，而是像对待朋友一样对待自己。" },
+    { title: "组块记忆", content: "把零散信息组合成有意义的“块”，例如把 11 位数字分成 3-4-4，记忆容量会明显扩大。" },
+    { title: "双系统思维", content: "大脑有一套快速的直觉系统，和一套缓慢的理性系统。直觉适合日常，重要决策则需要主动切换到慢思考。" },
+    { title: "注意力瞬脱", content: "在识别一个目标后，大脑会有约 200–500 毫秒的“短暂失明”，漏掉紧接着出现的第二个目标。这解释了忙乱时为何容易漏看信息。" },
+    { title: "多巴胺与动机", content: "多巴胺主要与“预期奖励”有关，而不是快乐本身。把大目标拆成一个个可完成的小节点，能持续获得动力。" },
+    { title: "运动与情绪", content: "中等强度的有氧运动能促进内啡肽和脑源性神经营养因子的分泌，对缓解轻中度抑郁和焦虑有稳定效果。" },
+    { title: "孤独感对健康的影响", content: "长期孤独对健康的危害，被研究认为可与吸烟、肥胖相提并论。它提醒我们：社交联结是基本生理需求，不是软弱。" },
+    { title: "认知重评", content: "同样一件事，换一个解释框架，情绪就会不同。比如把“我又搞砸了”换成“我找到了一个不该这么做的方法”。" }
+  ];
+  // 5. 联系方式（请替换为你自己的真实信息）
+  const contactInfo = {
+    intro: "欢迎通过以下任一方式与我交流，任何建议、纠错或合作想法都欢迎。",
+    channels: [
+      { icon: "📧", label: "邮箱",   value: "your-email@example.com",  href: "mailto:your-email@example.com" },
+      { icon: "💬", label: "微信",   value: "your-wechat-id",           href: "" },
+      { icon: "📱", label: "QQ",     value: "123456789",                href: "" },
+      { icon: "🐦", label: "微博",   value: "@your-weibo",              href: "https://weibo.com/your-weibo" },
+      { icon: "📺", label: "B 站",   value: "空间首页",                  href: "https://space.bilibili.com/0000000" },
+      { icon: "💻", label: "GitHub", value: "github.com/yourname",       href: "https://github.com/yourname" },
+      { icon: "📚", label: "公众号", value: "your-official-account",     href: "" }
+    ],
+    note: "以上信息为示例占位，请替换成你自己的真实联系方式后再发布。"
+  };
   /* ------------------------ 核心逻辑 ------------------------ */
 
   function showView(id) {
@@ -1336,6 +1403,50 @@
     document.getElementById('quoteAuthor').innerText = '—— ' + quote.author;
   }
 
+  /* ---------- 心理健康小知识 ---------- */
+  function renderHealthTip(tip, label) {
+    const body = document.getElementById('healthBody');
+    body.innerHTML = `
+      <div style="text-align:center;padding:16px 0;">
+        <div style="font-size:1.45rem;font-weight:600;margin-bottom:16px;">${tip.title}</div>
+        <div style="font-size:1.02rem;line-height:1.9;color:#2d3436;text-align:left;max-width:600px;margin:0 auto;">
+          ${tip.content}
+        </div>
+      </div>
+      <p style="text-align:center;color:#b2bec3;font-size:0.85rem;margin-top:8px;">${label}</p>
+      <button class="btn" style="display:block;margin:20px auto 0;" onclick="randomHealthTip()">随机看一条</button>
+    `;
+  }
+  function showHealthTip() {
+    const dayIndex = Math.floor(Date.now() / 86400000);
+    const tip = healthTips[dayIndex % healthTips.length];
+    renderHealthTip(tip, `今日知识 · 第 ${(dayIndex % healthTips.length) + 1} 条 / 共 ${healthTips.length} 条`);
+  }
+  function randomHealthTip() {
+    const tip = healthTips[Math.floor(Math.random() * healthTips.length)];
+    renderHealthTip(tip, `随机知识 · 共 ${healthTips.length} 条`);
+  }
+  /* ---------- 联系方式 ---------- */
+  function renderContact() {
+    const body = document.getElementById('contactBody');
+    const rows = contactInfo.channels.map(c => {
+      const valueHtml = c.href
+        ? `<a href="${c.href}" target="_blank" rel="noopener" style="color:#0984e3;text-decoration:none;">${c.value}</a>`
+        : `<span>${c.value}</span>`;
+      return `
+        <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;margin:8px 0;background:#f8fafc;border-radius:12px;">
+          <span style="font-size:1.3rem;">${c.icon}</span>
+          <span style="color:#636e72;min-width:66px;font-size:0.92rem;">${c.label}</span>
+          <span style="font-size:0.98rem;word-break:break-all;">${valueHtml}</span>
+        </div>
+      `;
+    }).join('');
+    body.innerHTML = `
+      <p style="color:#636e72;line-height:1.7;margin-bottom:16px;">${contactInfo.intro}</p>
+      ${rows}
+      <p style="margin-top:24px;color:#b2bec3;font-size:0.85rem;text-align:center;">${contactInfo.note}</p>
+    `;
+  }
   /* ---------- 工具函数 ---------- */
   function shuffle(arr) {
     const a = arr.slice();
